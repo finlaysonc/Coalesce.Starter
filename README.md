@@ -1,4 +1,4 @@
-# Coalesce.Starter
+# Coalesce.TaskListSample
 A barebones Coalesce project which can be built upon.
 
 For more information on Coalesce, visit http://coalesce.intellitect.com/
