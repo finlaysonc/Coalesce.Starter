@@ -6,6 +6,9 @@ namespace Coalesce.TaskListSample.Data.Models
 {
     public class Instructor : Person
     {
+        [Key]
+        public int InstructorId { get; set; }
+
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Hire Date")]

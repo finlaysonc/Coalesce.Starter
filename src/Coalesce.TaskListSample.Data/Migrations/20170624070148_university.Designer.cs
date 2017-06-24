@@ -8,8 +8,8 @@ using Coalesce.TaskListSample.Data;
 namespace Coalesce.TaskListSample.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20170624062134_university2")]
-    partial class university2
+    [Migration("20170624070148_university")]
+    partial class university
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,50 +29,50 @@ namespace Coalesce.TaskListSample.Data.Migrations
                     b.ToTable("ApplicationUsers");
                 });
 
-            modelBuilder.Entity("Coalesce.TaskListSample.Data.Models.Person", b =>
+            modelBuilder.Entity("Coalesce.TaskListSample.Data.Models.Instructor", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("InstructorId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired();
-
-                    b.Property<string>("FirstMidName")
+                    b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnName("FirstName")
                         .HasMaxLength(50);
+
+                    b.Property<string>("FullName");
+
+                    b.Property<DateTime>("HireDate");
 
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(50);
 
-                    b.HasKey("ID");
+                    b.HasKey("InstructorId");
 
-                    b.ToTable("People");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Person");
-                });
-
-            modelBuilder.Entity("Coalesce.TaskListSample.Data.Models.Instructor", b =>
-                {
-                    b.HasBaseType("Coalesce.TaskListSample.Data.Models.Person");
-
-                    b.Property<DateTime>("HireDate");
-
-                    b.ToTable("Instructor");
-
-                    b.HasDiscriminator().HasValue("Instructor");
+                    b.ToTable("Instructors");
                 });
 
             modelBuilder.Entity("Coalesce.TaskListSample.Data.Models.Student", b =>
                 {
-                    b.HasBaseType("Coalesce.TaskListSample.Data.Models.Person");
+                    b.Property<int>("StudentId")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("EnrollmentDate");
 
-                    b.ToTable("Student");
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
-                    b.HasDiscriminator().HasValue("Student");
+                    b.Property<string>("FullName")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasComputedColumnSql("[LastName] + ','  + [FirstName]");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.HasKey("StudentId");
+
+                    b.ToTable("Students");
                 });
         }
     }

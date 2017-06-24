@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net46</TargetFramework>
@@ -9,6 +9,13 @@
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Models\Course.cs" />
+    <Compile Remove="Models\Department.cs" />
+    <Compile Remove="Models\Enrollment.cs" />
+    <Compile Remove="Models\OfficeAssignment.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\submodules\Coalesce\src\IntelliTect.Coalesce\IntelliTect.Coalesce.csproj" />
@@ -27,6 +34,15 @@
 
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+    <Folder Include="Migrations\" />
+    <Folder Include="Migrations\" />
+    <Folder Include="Migrations\" />
+    <Folder Include="Migrations\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

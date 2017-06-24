@@ -10,3 +10,7 @@
 /// <reference path="coalesce.dependencies.d.ts" />
 /// <reference path="Generated\Ko.ApplicationUser.ts" />
 /// <reference path="Generated\Ko.ApplicationUserList.ts" />
+/// <reference path="Generated\Ko.Instructor.ts" />
+/// <reference path="Generated\Ko.InstructorList.ts" />
+/// <reference path="Generated\Ko.Student.ts" />
+/// <reference path="Generated\Ko.StudentList.ts" />

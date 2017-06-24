@@ -16,9 +16,8 @@ namespace Coalesce.TaskListSample.Data
         //public DbSet<Enrollment> Enrollments { get; set; }
         public DbSet<Instructor> Instructors { get; set; }
         public DbSet<Student> Students { get; set; }
-        public DbSet<Person> People { get; set; }
 
-            public AppDbContext()
+        public AppDbContext()
         {
         }
 
@@ -36,7 +35,9 @@ namespace Coalesce.TaskListSample.Data
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
 
-
+            builder.Entity<Student>()
+      .Property(p => p.FullName)
+      .HasComputedColumnSql($"[{nameof(Student.LastName)}] + ','  + [{nameof(Student.FirstName)}]");
 
 
         }
