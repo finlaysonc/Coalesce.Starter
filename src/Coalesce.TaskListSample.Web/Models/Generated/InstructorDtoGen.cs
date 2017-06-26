@@ -26,6 +26,7 @@ namespace Coalesce.TaskListSample.Web.Models
         public System.String LastName { get; set; }
         public System.String FirstName { get; set; }
         public System.String FullName { get; set; }
+        public System.String CalculatedField { get; set; }
 
         // Create a new version of this object or use it from the lookup.
         public static InstructorDtoGen Create(Coalesce.TaskListSample.Data.Models.Instructor obj, ClaimsPrincipal user = null, string includes = null,
@@ -64,6 +65,7 @@ namespace Coalesce.TaskListSample.Web.Models
             newObject.LastName = obj.LastName;
             newObject.FirstName = obj.FirstName;
             newObject.FullName = obj.FullName;
+            newObject.CalculatedField = obj.CalculatedField;
             return newObject;
         }
 

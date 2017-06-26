@@ -28,14 +28,20 @@ module ViewModels {
         // Observables
         public studentId: KnockoutObservable<number> = ko.observable(null);
         public enrollmentDate: KnockoutObservable<moment.Moment> = ko.observable(moment());
+        public enrollments: KnockoutObservableArray<ViewModels.Enrollment> = ko.observableArray([]);
         public lastName: KnockoutObservable<string> = ko.observable(null);
         public firstName: KnockoutObservable<string> = ko.observable(null);
         public fullName: KnockoutObservable<string> = ko.observable(null);
+        public calculatedField: KnockoutObservable<string> = ko.observable(null);
 
        
         // Create computeds for display for objects
         
+        public addToEnrollments: (autoSave?: boolean) => Enrollment;
+        // List Object model for Enrollments. Allows for loading subsets of data.
+        public enrollmentsList: (loadImmediate?: boolean) => ListViewModels.EnrollmentList;
 
+        public EnrollmentsListUrl: () => void; 
                 // Pops up a stock editor for this object.
 
 
@@ -72,9 +78,11 @@ module ViewModels {
             self.errors = ko.validation.group([
                 self.studentId,
                 self.enrollmentDate,
+                self.enrollments,
                 self.lastName,
                 self.firstName,
                 self.fullName,
+                self.calculatedField,
             ]);
             self.warnings = ko.validation.group([
             ]);
@@ -97,6 +105,10 @@ module ViewModels {
 				self.myId = data.studentId;
 				self.studentId(data.studentId);
 				// Load the lists of other objects
+                if (data.enrollments != null) {
+				    // Merge the incoming array
+				    Coalesce.KnockoutUtilities.RebuildArray(self.enrollments, data.enrollments, 'enrollmentId', Enrollment, self, allowCollectionDeletes);
+				} 
 				// Objects are loaded first so that they are available when the IDs get loaded.
 				// This handles the issue with populating select lists with correct data because we now have the object.
 
@@ -108,6 +120,7 @@ module ViewModels {
 				self.lastName(data.lastName);
 				self.firstName(data.firstName);
 				self.fullName(data.fullName);
+				self.calculatedField(data.calculatedField);
                 if (self.afterLoadFromDto){
                     self.afterLoadFromDto();
                 }
@@ -131,6 +144,35 @@ module ViewModels {
 
             // Methods to add to child collections
 
+            self.addToEnrollments = function(autoSave = true) {
+                var newItem = new Enrollment();
+                if (typeof(autoSave) == 'boolean'){
+                    newItem.coalesceConfig.autoSaveEnabled(autoSave);
+                }
+                newItem.parent = self;
+                newItem.parentCollection = self.enrollments;
+                newItem.isExpanded(true);
+                newItem.studentId(self.studentId());
+                self.enrollments.push(newItem);
+                return newItem;
+            }
+            
+            // List Object model for Enrollments. Allows for loading subsets of data.
+            var _enrollmentsList: ListViewModels.EnrollmentList = null;
+            self.enrollmentsList = function(loadImmediate = true) {
+                if (!_enrollmentsList){
+                    _enrollmentsList = new ListViewModels.EnrollmentList();
+                    if (loadImmediate) loadEnrollmentsList();
+                    self.studentId.subscribe(loadEnrollmentsList)
+                }
+                return _enrollmentsList;
+            }
+            function loadEnrollmentsList() {
+                if (self.studentId()){
+                    _enrollmentsList.queryString = "StudentId=" + self.studentId();
+                    _enrollmentsList.load();
+                }
+            }
 
             // Save on changes
             function setupSubscriptions() {
@@ -140,6 +182,12 @@ module ViewModels {
             }  
 
             // Create variables for ListEditorApiUrls
+            self.EnrollmentsListUrl = ko.computed({
+                read: function() {
+                         return self.coalesceConfig.baseViewUrl() + '/Enrollment/Table?studentId=' + self.studentId();
+                },
+                deferEvaluation: true
+            });
             // Create loading function for Valid Values
 
 

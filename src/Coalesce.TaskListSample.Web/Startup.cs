@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -15,9 +16,43 @@ using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Coalesce.TaskListSample.Web
 {
+    public class MyLoggerProvider : ILoggerProvider
+    {
+        public ILogger CreateLogger(string categoryName)
+        {
+            return new MyLogger();
+        }
+
+        public void Dispose()
+        {
+        }
+
+        private class MyLogger : ILogger
+        {
+            public bool IsEnabled(LogLevel logLevel)
+            {
+                return logLevel == LogLevel.Warning;
+            }
+
+            public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception,
+                Func<TState, Exception, string> formatter)
+            {
+                File.AppendAllText(@"C:\temp\log.txt", formatter(state, exception));
+                Console.WriteLine(formatter(state, exception));
+            }
+
+            public IDisposable BeginScope<TState>(TState state)
+            {
+                return null;
+            }
+        }
+    }
+
+
     public class Startup
     {
         public Startup(IHostingEnvironment env)
@@ -47,8 +82,15 @@ namespace Coalesce.TaskListSample.Web
             // Add Entity Framework services to the services
             services.AddSingleton<IConfigurationRoot, IConfigurationRoot>(sp => Configuration);
             services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(connString));
-
+                options.UseSqlServer(connString).
+                ConfigureWarnings(warnings =>
+                    {
+                        warnings.Log(CoreEventId.IncludeIgnoredWarning);
+                        warnings.Log(RelationalEventId.OpeningConnection);
+                        warnings.Log(RelationalEventId.PossibleIncorrectResultsUsingLikeOperator);
+                        warnings.Log(RelationalEventId.PossibleUnintendedUseOfEqualsWarning);
+                        warnings.Log(RelationalEventId.QueryClientEvaluationWarning);
+                    }));
             services.AddMvc().AddJsonOptions(options =>
             {
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -71,8 +113,8 @@ namespace Coalesce.TaskListSample.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole();
-
+            loggerFactory.AddConsole(LogLevel.Warning);
+            loggerFactory.AddProvider(new MyLoggerProvider());
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using Coalesce.TaskListSample.Web.Models;
 using Coalesce.TaskListSample.Data.Models;
 using Coalesce.TaskListSample.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Coalesce.TaskListSample.Web.Api
 {
@@ -25,9 +26,10 @@ namespace Coalesce.TaskListSample.Web.Api
     {
         protected ClassViewModel Model;
 
-        public StudentController()
+        public StudentController() : base()
         {
             Model = ReflectionRepository.Models.Single(m => m.Name == "Student");
+            Db.EnsureAutoHistory();
         }
 
 
@@ -44,7 +46,7 @@ namespace Coalesce.TaskListSample.Web.Api
             string listDataSource = null,
             string search = null,
             // Custom fields for this object.
-            string studentId = null, string enrollmentDate = null, string lastName = null, string firstName = null, string fullName = null)
+            string studentId = null, string enrollmentDate = null, string lastName = null, string firstName = null, string fullName = null, string calculatedField = null)
         {
 
             ListParameters parameters = new ListParameters(null, includes, orderBy, orderByDescending, page, pageSize, where, listDataSource, search);
@@ -55,6 +57,7 @@ namespace Coalesce.TaskListSample.Web.Api
             parameters.AddFilter("LastName", lastName);
             parameters.AddFilter("FirstName", firstName);
             parameters.AddFilter("FullName", fullName);
+            parameters.AddFilter("CalculatedField", calculatedField);
 
             var listResult = await ListImplementation(parameters);
             return new GenericListResult<Coalesce.TaskListSample.Data.Models.Student, StudentDtoGen>(listResult);
@@ -74,7 +77,7 @@ namespace Coalesce.TaskListSample.Web.Api
             string listDataSource = null,
             string search = null,
             // Custom fields for this object.
-            string studentId = null, string enrollmentDate = null, string lastName = null, string firstName = null, string fullName = null)
+            string studentId = null, string enrollmentDate = null, string lastName = null, string firstName = null, string fullName = null, string calculatedField = null)
         {
 
             ListParameters parameters = new ListParameters(fields, includes, orderBy, orderByDescending, page, pageSize, where, listDataSource, search);
@@ -85,6 +88,7 @@ namespace Coalesce.TaskListSample.Web.Api
             parameters.AddFilter("LastName", lastName);
             parameters.AddFilter("FirstName", firstName);
             parameters.AddFilter("FullName", fullName);
+            parameters.AddFilter("CalculatedField", calculatedField);
 
             return await ListImplementation(parameters);
         }
@@ -96,7 +100,7 @@ namespace Coalesce.TaskListSample.Web.Api
             string listDataSource = null,
             string search = null,
             // Custom fields for this object.
-            string studentId = null, string enrollmentDate = null, string lastName = null, string firstName = null, string fullName = null)
+            string studentId = null, string enrollmentDate = null, string lastName = null, string firstName = null, string fullName = null, string calculatedField = null)
         {
 
             ListParameters parameters = new ListParameters(where: where, listDataSource: listDataSource, search: search, fields: null);
@@ -107,6 +111,7 @@ namespace Coalesce.TaskListSample.Web.Api
             parameters.AddFilter("LastName", lastName);
             parameters.AddFilter("FirstName", firstName);
             parameters.AddFilter("FullName", fullName);
+            parameters.AddFilter("CalculatedField", calculatedField);
 
             return await CountImplementation(parameters);
         }
@@ -190,7 +195,7 @@ namespace Coalesce.TaskListSample.Web.Api
             string listDataSource = null,
             string search = null,
             // Custom fields for this object.
-            string studentId = null, string enrollmentDate = null, string lastName = null, string firstName = null, string fullName = null)
+            string studentId = null, string enrollmentDate = null, string lastName = null, string firstName = null, string fullName = null, string calculatedField = null)
         {
             ListParameters parameters = new ListParameters(null, "none", orderBy, orderByDescending, page, pageSize, where, listDataSource, search);
 
@@ -200,6 +205,7 @@ namespace Coalesce.TaskListSample.Web.Api
             parameters.AddFilter("LastName", lastName);
             parameters.AddFilter("FirstName", firstName);
             parameters.AddFilter("FullName", fullName);
+            parameters.AddFilter("CalculatedField", calculatedField);
 
             var listResult = await ListImplementation(parameters);
             var list = listResult.List.Cast<StudentDtoGen>();
@@ -221,7 +227,7 @@ namespace Coalesce.TaskListSample.Web.Api
             string listDataSource = null,
             string search = null,
             // Custom fields for this object.
-            string studentId = null, string enrollmentDate = null, string lastName = null, string firstName = null, string fullName = null)
+            string studentId = null, string enrollmentDate = null, string lastName = null, string firstName = null, string fullName = null, string calculatedField = null)
         {
             ListParameters parameters = new ListParameters(null, "none", orderBy, orderByDescending, page, pageSize, where, listDataSource, search);
 
@@ -231,6 +237,7 @@ namespace Coalesce.TaskListSample.Web.Api
             parameters.AddFilter("LastName", lastName);
             parameters.AddFilter("FirstName", firstName);
             parameters.AddFilter("FullName", fullName);
+            parameters.AddFilter("CalculatedField", calculatedField);
 
             var listResult = await ListImplementation(parameters);
             var list = listResult.List.Cast<StudentDtoGen>();

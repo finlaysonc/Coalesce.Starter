@@ -5,8 +5,8 @@
 <div style="padding: 10px 15px">
     <div class="clearfix">
         <h1 style="display: inline-block">
-            Student List
-                <span style="font-size: .5em; padding-left: 20px;"><a href="~/Student/Docs">API Docs</a></span>
+            Enrollment List
+                <span style="font-size: .5em; padding-left: 20px;"><a href="~/Enrollment/Docs">API Docs</a></span>
         </h1>
         <span class="label label-info" data-bind="fadeVisible: isLoading()">Loading...</span>
     </div>
@@ -33,7 +33,7 @@
         <input class="form-control pull-right" style="width: 250px; margin-left: 20px" data-bind="textInput: search" placeholder="Search" />
 
         <div class="btn-group pull-right">
-                    <a href="~/Student/CreateEdit?@(ViewBag.Query)" role="button" class="btn btn-sm btn-default "><i class="fa fa-plus"></i> Create</a>
+                    <a href="~/Enrollment/CreateEdit?@(ViewBag.Query)" role="button" class="btn btn-sm btn-default "><i class="fa fa-plus"></i> Create</a>
                 <button data-bind="click:load" class="btn btn-sm btn-default "><i class="fa fa-refresh"></i> Refresh</button>
                 <a href="#" role="button" class="btn btn-sm btn-default " data-bind="attr:{href: downloadAllCsvUrl}"><i class="fa fa-download"></i> CSV</a>
                     <button role="button" class="btn btn-sm btn-default " data-bind="click: csvUploadUi"><i class="fa fa-upload"></i> CSV</button>
@@ -55,29 +55,17 @@
         <div class="card-body flex">
 
             <dl>
-                    <dt>Enrollment Date</dt>
+                    <dt>Grade</dt>
                     <dd>
-                        @(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Student>(p => p.EnrollmentDate, false))
+                        @(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Enrollment>(p => p.Grade, false))
                     </dd>
-                    <dt>Enrollments</dt>
+                    <dt>Course</dt>
                     <dd>
-                        <a data-bind='attr: {href: EnrollmentsListUrl}, text: enrollments().length + " - Edit"' class='btn btn-default btn-sm'></a>
+                        @(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Enrollment>(p => p.Course, false))
                     </dd>
-                    <dt>Last Name</dt>
+                    <dt>Student</dt>
                     <dd>
-                        @(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Student>(p => p.LastName, false))
-                    </dd>
-                    <dt>First Name</dt>
-                    <dd>
-                        @(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Student>(p => p.FirstName, false))
-                    </dd>
-                    <dt>Full Name</dt>
-                    <dd>
-                        @(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Student>(p => p.FullName, false))
-                    </dd>
-                    <dt>Calculated Field</dt>
-                    <dd>
-                        @(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Student>(p => p.CalculatedField, false))
+                        @(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Enrollment>(p => p.Student, false))
                     </dd>
 
             </dl>
@@ -111,36 +99,36 @@
     {
 
     <script>
-        var studentList = new ListViewModels.StudentList();
+        var enrollmentList = new ListViewModels.EnrollmentList();
         
         // Set up parent info based on the URL.
         @if (ViewBag.Query != null)
         {
-            @:studentList.queryString = "@(ViewBag.Query)";
+            @:enrollmentList.queryString = "@(ViewBag.Query)";
         }
 
         // Save and restore values from the URL:
         var urlVariables = ['page', 'pageSize', 'search'];
         $.each(urlVariables, function(){
             var param = Coalesce.Utilities.GetUrlParameter(this);
-            if (param) {studentList[this](param);}
+            if (param) {enrollmentList[this](param);}
         })
-        studentList.isLoading.subscribe(function(){
+        enrollmentList.isLoading.subscribe(function(){
             var newUrl = window.location.href;
             
             $.each(urlVariables, function(){
-                var param = studentList[this]();
+                var param = enrollmentList[this]();
                 newUrl = Coalesce.Utilities.SetUrlParameter(newUrl, this, param);
             })
             history.replaceState(null, document.title, newUrl);
         });
 
-        studentList.isSavingAutomatically = false;
-        ko.applyBindings(studentList);
-        studentList.isSavingAutomatically = true;
+        enrollmentList.isSavingAutomatically = false;
+        ko.applyBindings(enrollmentList);
+        enrollmentList.isSavingAutomatically = true;
 
-        studentList.includes = "StudentListGen";
-        studentList.load();
+        enrollmentList.includes = "EnrollmentListGen";
+        enrollmentList.load();
 
     </script>
     }

@@ -28,6 +28,7 @@ module ListViewModels {
             lastName?:String;
             firstName?:String;
             fullName?:String;
+            calculatedField?:String;
         } = null;
 
         // The custom code to run in order to pull the initial datasource to use for the collection that should be returned

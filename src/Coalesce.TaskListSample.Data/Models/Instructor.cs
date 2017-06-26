@@ -13,7 +13,7 @@ namespace Coalesce.TaskListSample.Data.Models
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Hire Date")]
         public DateTime HireDate { get; set; }
-
+        public DateTime? TerminationDate { get; set; }
 //        public  ICollection<Course> Courses { get; set; }
     }
 }

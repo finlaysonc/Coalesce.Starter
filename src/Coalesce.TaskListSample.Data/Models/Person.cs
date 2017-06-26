@@ -17,11 +17,11 @@ namespace Coalesce.TaskListSample.Data.Models
             [Display(Name = "Full Name")]
             [Read]
             public string FullName { get;  set; }
-            //{
-            //    get
-            //    {
-            //        return LastName + ", " + FirstMidName;
-            //    }
-            //}
+
+        [NotMapped]
+            public string CalculatedField
+            {
+                get { return FirstName + " " + LastName; }
+            }
         }
 }

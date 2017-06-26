@@ -23,9 +23,11 @@ namespace Coalesce.TaskListSample.Web.Models
 
         public Int32? StudentId { get; set; }
         public DateTime? EnrollmentDate { get; set; }
+        public ICollection<EnrollmentDtoGen> Enrollments { get; set; }
         public System.String LastName { get; set; }
         public System.String FirstName { get; set; }
         public System.String FullName { get; set; }
+        public System.String CalculatedField { get; set; }
 
         // Create a new version of this object or use it from the lookup.
         public static StudentDtoGen Create(Coalesce.TaskListSample.Data.Models.Student obj, ClaimsPrincipal user = null, string includes = null,
@@ -64,6 +66,17 @@ namespace Coalesce.TaskListSample.Web.Models
             newObject.LastName = obj.LastName;
             newObject.FirstName = obj.FirstName;
             newObject.FullName = obj.FullName;
+            newObject.CalculatedField = obj.CalculatedField;
+            var propValEnrollments = obj.Enrollments;
+            if (propValEnrollments != null && (tree == null || tree[nameof(newObject.Enrollments)] != null))
+            {
+                newObject.Enrollments = propValEnrollments.OrderBy("EnrollmentId ASC").Select(f => EnrollmentDtoGen.Create(f, user, includes, objects, tree?[nameof(newObject.Enrollments)])).ToList();
+            }
+            else if (propValEnrollments == null && tree?[nameof(newObject.Enrollments)] != null)
+            {
+                newObject.Enrollments = new EnrollmentDtoGen[0];
+            }
+
             return newObject;
         }
 

@@ -11,9 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Models\Course.cs" />
     <Compile Remove="Models\Department.cs" />
-    <Compile Remove="Models\Enrollment.cs" />
     <Compile Remove="Models\OfficeAssignment.cs" />
   </ItemGroup>
 
@@ -23,6 +21,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="1.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.AutoHistory" Version="1.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="1.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="1.1.2" />
   </ItemGroup>

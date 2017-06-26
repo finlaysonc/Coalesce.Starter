@@ -80,6 +80,10 @@
                             Full Name
                             <i class="pull-right fa" data-bind="css:{'fa-caret-up': orderBy() == 'FullName', 'fa-caret-down': orderByDescending() == 'FullName'}"></i>
                         </th>
+                        <th class="sortable-header" data-bind="click: function(){orderByToggle('CalculatedField')}">
+                            Calculated Field
+                            <i class="pull-right fa" data-bind="css:{'fa-caret-up': orderBy() == 'CalculatedField', 'fa-caret-down': orderByDescending() == 'CalculatedField'}"></i>
+                        </th>
                 <th style="width: 1%">
                 </th>
             </tr>
@@ -94,6 +98,7 @@
                         <td class="prop-lastName">@(Knockout.InputFor<Coalesce.TaskListSample.Data.Models.Instructor>(p => p.LastName))</td>
                         <td class="prop-firstName">@(Knockout.InputFor<Coalesce.TaskListSample.Data.Models.Instructor>(p => p.FirstName))</td>
                         <td class="prop-fullName">@(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Instructor>(p => p.FullName, true))</td>
+                        <td class="prop-calculatedField">@(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Instructor>(p => p.CalculatedField, true))</td>
                     }
                     else
                     {
@@ -101,6 +106,7 @@
                         <td class="prop-lastName">@(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Instructor>(p => p.LastName, true))</td>
                         <td class="prop-firstName">@(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Instructor>(p => p.FirstName, true))</td>
                         <td class="prop-fullName">@(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Instructor>(p => p.FullName, true))</td>
+                        <td class="prop-calculatedField">@(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Instructor>(p => p.CalculatedField, true))</td>
                     }
                 <td>
 

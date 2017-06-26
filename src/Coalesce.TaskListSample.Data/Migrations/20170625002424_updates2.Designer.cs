@@ -8,9 +8,10 @@ using Coalesce.TaskListSample.Data;
 namespace Coalesce.TaskListSample.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170625002424_updates2")]
+    partial class updates2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -82,8 +83,6 @@ namespace Coalesce.TaskListSample.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(50);
 
-                    b.Property<DateTime?>("TerminationDate");
-
                     b.HasKey("InstructorId");
 
                     b.HasIndex("CourseId");
@@ -113,31 +112,6 @@ namespace Coalesce.TaskListSample.Data.Migrations
                     b.HasKey("StudentId");
 
                     b.ToTable("Students");
-                });
-
-            modelBuilder.Entity("Microsoft.EntityFrameworkCore.Internal.AutoHistory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Changed")
-                        .HasMaxLength(2048);
-
-                    b.Property<DateTime>("Created");
-
-                    b.Property<int>("Kind");
-
-                    b.Property<string>("RowId")
-                        .IsRequired()
-                        .HasMaxLength(50);
-
-                    b.Property<string>("TableName")
-                        .IsRequired()
-                        .HasMaxLength(128);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AutoHistory");
                 });
 
             modelBuilder.Entity("Coalesce.TaskListSample.Data.Models.Enrollment", b =>
