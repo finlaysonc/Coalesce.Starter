@@ -8,17 +8,13 @@
 
 
 /// <reference path="coalesce.dependencies.d.ts" />
-/// <reference path="Generated\Ko.Course.ts" />
-/// <reference path="Generated\Ko.CourseAssignment.ts" />
-/// <reference path="Generated\Ko.CourseAssignmentList.ts" />
-/// <reference path="Generated\Ko.CourseList.ts" />
-/// <reference path="Generated\Ko.Department.ts" />
-/// <reference path="Generated\Ko.DepartmentList.ts" />
-/// <reference path="Generated\Ko.Enrollment.ts" />
-/// <reference path="Generated\Ko.EnrollmentList.ts" />
-/// <reference path="Generated\Ko.Instructor.ts" />
-/// <reference path="Generated\Ko.InstructorList.ts" />
-/// <reference path="Generated\Ko.OfficeAssignment.ts" />
-/// <reference path="Generated\Ko.OfficeAssignmentList.ts" />
-/// <reference path="Generated\Ko.Student.ts" />
-/// <reference path="Generated\Ko.StudentList.ts" />
+/// <reference path="Generated\Ko.Author.ts" />
+/// <reference path="Generated\Ko.AuthorList.ts" />
+/// <reference path="Generated\Ko.Blog.ts" />
+/// <reference path="Generated\Ko.BlogAndAuthor.ts" />
+/// <reference path="Generated\Ko.BlogAndAuthorList.ts" />
+/// <reference path="Generated\Ko.BlogList.ts" />
+/// <reference path="Generated\Ko.BlogsWithNameFoo.ts" />
+/// <reference path="Generated\Ko.BlogsWithNameFooList.ts" />
+/// <reference path="Generated\Ko.ShortBlog.ts" />
+/// <reference path="Generated\Ko.ShortBlogList.ts" />

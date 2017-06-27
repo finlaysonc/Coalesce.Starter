@@ -1,21 +1,28 @@
-﻿using Coalesce.TaskListSample.Data.Models;
+﻿//add-migration -Name Initial -Context AppDbContext -StartupProject Coalesce.TaskListSample.Data
+
+using Coalesce.TaskListSample.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace Coalesce.TaskListSample.Data
 {
     public class AppDbContext : DbContext
     {
-        public DbSet<Course> Courses { get; set; }
-        public DbSet<Enrollment> Enrollments { get; set; }
-        public DbSet<Student> Students { get; set; }
-        public DbSet<Department> Departments { get; set; }
-        public DbSet<Instructor> Instructors { get; set; }
-        public DbSet<OfficeAssignment> OfficeAssignments { get; set; }
-        public DbSet<CourseAssignment> CourseAssignments { get; set; }
+        public DbSet<Blog> Blogs { get; set; }
 
+        [NotMapped]
+        public DbSet<ShortBlog> ShortBlogs { get; set; }
+
+        public DbSet<Author> Authors { get; set; }
+
+        [NotMapped]
+        public DbSet<BlogsWithNameFoo> BlogsWithNameFoo { get; set; }
+
+        [NotMapped]
+        public DbSet<BlogAndAuthor> BlogAndAuthor { get; set; }
 
         public AppDbContext()
         {
@@ -24,7 +31,6 @@ namespace Coalesce.TaskListSample.Data
         public AppDbContext(DbContextOptions options) : base(options)
         {
         }
-
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -36,11 +42,11 @@ namespace Coalesce.TaskListSample.Data
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
 
-            builder.Entity<Student>()
-                .Property(p => p.FullName)
-                .HasComputedColumnSql($"[{nameof(Student.LastName)}] + ','  + [{nameof(Student.FirstMidName)}]");
+            //builder.Entity<Student>()
+            //    .Property(p => p.FullName)
+            //    .HasComputedColumnSql($"[{nameof(Student.LastName)}] + ','  + [{nameof(Student.FirstMidName)}]");
 
-//            builder.EnableAutoHistory();
+            // builder.EnableAutoHistory();
         }
 
         /// <summary>
@@ -61,4 +67,3 @@ namespace Coalesce.TaskListSample.Data
         }
     }
 }
-

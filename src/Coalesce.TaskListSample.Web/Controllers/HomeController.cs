@@ -21,8 +21,8 @@ namespace Coalesce.TaskListSample.Web.Controllers
         }
         public IActionResult Index()
         {
-            Db.EnsureAutoHistory();
-//            var y = Db.Enrollments.Where(x => test(x.Course.Title));
+            //            Db.EnsureAutoHistory();
+            //            var y = Db.Enrollments.Where(x => test(x.Course.Title));
             //            Console.WriteLine(Db.Enrollments.Count());
             return View();
         }

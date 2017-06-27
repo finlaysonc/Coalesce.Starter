@@ -1,0 +1,63 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="btn-group pull-right">
+            <button onclick="window.history.back()" class="btn btn-sm btn-default">Back</button>
+            <button data-bind="click:function() { load(); }" class="btn btn-sm btn-default">Refresh</button>
+        </div>
+        <h1 class="clearfix" style="display:inline-block;">Author</h1>
+        <span class="label label-info" data-bind="fadeVisible: isLoading()">Loading...</span>
+    </div>
+    <div class="panel-body">
+        <div class="form-horizontal">
+            <div class="form-group btn-warning" data-bind="if: errorMessage()">
+                <label class="col-md-4 control-label">Error</label>
+                <div class="col-md-8">
+                    <div class="form-control-static" data-bind="text: errorMessage"></div>
+                </div>
+            </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Last Name</label>
+<div class="col-md-8 prop-lastName">@(Knockout.InputFor<Coalesce.TaskListSample.Data.Models.Author>(p => p.LastName))</div>                    </div>
+        </div>
+    </div>
+    <div class="panel-body">
+    </div>
+</div>
+
+
+    @section Scripts
+    {
+    <script>
+        var aauthor = new ViewModels.Author();
+        aauthor.includes = "Editor";
+
+        aauthor.saveCallbacks.push(function(obj){
+            // If there is a new id, set the one for this page
+            if (!Coalesce.Utilities.GetUrlParameter('id')){
+                if (aauthor.myId){
+                    var newUrl = Coalesce.Utilities.SetUrlParameter(window.location.href, "id", aauthor.myId);
+                    window.history.replaceState(null, window.document.title, newUrl);
+                }
+            }
+        });
+
+        @if (ViewBag.Id != null)
+                {
+                    @:aauthor.load('@ViewBag.Id');
+                }
+        @foreach (var kvp in ViewBag.ParentIds)
+                {
+                    @:aauthor.@(((string)(@kvp.Key)))(@kvp.Value);
+                }
+
+        window.onbeforeunload = function(){
+            if (aauthor.isDirty()) aauthor.save();
+        }
+
+        aauthor.isSavingAutomatically = false;
+        aauthor.loadChildren(function() {
+            ko.applyBindings(aauthor);
+            aauthor.isSavingAutomatically = true;
+        });
+    </script>
+    }

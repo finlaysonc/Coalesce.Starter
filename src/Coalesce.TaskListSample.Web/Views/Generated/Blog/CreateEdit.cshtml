@@ -1,0 +1,72 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="btn-group pull-right">
+            <button onclick="window.history.back()" class="btn btn-sm btn-default">Back</button>
+            <button data-bind="click:function() { load(); }" class="btn btn-sm btn-default">Refresh</button>
+        </div>
+        <h1 class="clearfix" style="display:inline-block;">Blog</h1>
+        <span class="label label-info" data-bind="fadeVisible: isLoading()">Loading...</span>
+    </div>
+    <div class="panel-body">
+        <div class="form-horizontal">
+            <div class="form-group btn-warning" data-bind="if: errorMessage()">
+                <label class="col-md-4 control-label">Error</label>
+                <div class="col-md-8">
+                    <div class="form-control-static" data-bind="text: errorMessage"></div>
+                </div>
+            </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Name</label>
+<div class="col-md-8 prop-name">@(Knockout.InputFor<Coalesce.TaskListSample.Data.Models.Blog>(p => p.Name))</div>                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Url</label>
+<div class="col-md-8 prop-url">@(Knockout.InputFor<Coalesce.TaskListSample.Data.Models.Blog>(p => p.Url))</div>                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Author</label>
+<div class="col-md-7 prop-author">@(Knockout.SelectForObject<Coalesce.TaskListSample.Data.Models.Blog>(p => p.Author))</div>                            <div class="col-md-1" data-bind="with: author">
+                                <a data-bind="attr: {href: editUrl}" class="btn btn-default pull-right"><i class="fa fa-ellipsis-h "></i></a>
+                            </div>
+                    </div>
+        </div>
+    </div>
+    <div class="panel-body">
+    </div>
+</div>
+
+
+    @section Scripts
+    {
+    <script>
+        var ablog = new ViewModels.Blog();
+        ablog.includes = "Editor";
+
+        ablog.saveCallbacks.push(function(obj){
+            // If there is a new id, set the one for this page
+            if (!Coalesce.Utilities.GetUrlParameter('id')){
+                if (ablog.myId){
+                    var newUrl = Coalesce.Utilities.SetUrlParameter(window.location.href, "id", ablog.myId);
+                    window.history.replaceState(null, window.document.title, newUrl);
+                }
+            }
+        });
+
+        @if (ViewBag.Id != null)
+                {
+                    @:ablog.load('@ViewBag.Id');
+                }
+        @foreach (var kvp in ViewBag.ParentIds)
+                {
+                    @:ablog.@(((string)(@kvp.Key)))(@kvp.Value);
+                }
+
+        window.onbeforeunload = function(){
+            if (ablog.isDirty()) ablog.save();
+        }
+
+        ablog.isSavingAutomatically = false;
+        ablog.loadChildren(function() {
+            ko.applyBindings(ablog);
+            ablog.isSavingAutomatically = true;
+        });
+    </script>
+    }
