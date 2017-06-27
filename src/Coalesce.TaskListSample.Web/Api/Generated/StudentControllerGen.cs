@@ -15,7 +15,6 @@ using System.Threading.Tasks;
 using Coalesce.TaskListSample.Web.Models;
 using Coalesce.TaskListSample.Data.Models;
 using Coalesce.TaskListSample.Data;
-using Microsoft.EntityFrameworkCore;
 
 namespace Coalesce.TaskListSample.Web.Api
 {
@@ -26,10 +25,9 @@ namespace Coalesce.TaskListSample.Web.Api
     {
         protected ClassViewModel Model;
 
-        public StudentController() : base()
+        public StudentController()
         {
             Model = ReflectionRepository.Models.Single(m => m.Name == "Student");
-            Db.EnsureAutoHistory();
         }
 
 
@@ -46,18 +44,18 @@ namespace Coalesce.TaskListSample.Web.Api
             string listDataSource = null,
             string search = null,
             // Custom fields for this object.
-            string studentId = null, string enrollmentDate = null, string lastName = null, string firstName = null, string fullName = null, string calculatedField = null)
+            string studentID = null, string enrollmentDate = null, string lastName = null, string firstMidName = null, string fullName = null, string fullNameCalculated = null)
         {
 
             ListParameters parameters = new ListParameters(null, includes, orderBy, orderByDescending, page, pageSize, where, listDataSource, search);
 
             // Add custom filters
-            parameters.AddFilter("StudentId", studentId);
+            parameters.AddFilter("StudentID", studentID);
             parameters.AddFilter("EnrollmentDate", enrollmentDate);
             parameters.AddFilter("LastName", lastName);
-            parameters.AddFilter("FirstName", firstName);
+            parameters.AddFilter("FirstMidName", firstMidName);
             parameters.AddFilter("FullName", fullName);
-            parameters.AddFilter("CalculatedField", calculatedField);
+            parameters.AddFilter("FullNameCalculated", fullNameCalculated);
 
             var listResult = await ListImplementation(parameters);
             return new GenericListResult<Coalesce.TaskListSample.Data.Models.Student, StudentDtoGen>(listResult);
@@ -77,18 +75,18 @@ namespace Coalesce.TaskListSample.Web.Api
             string listDataSource = null,
             string search = null,
             // Custom fields for this object.
-            string studentId = null, string enrollmentDate = null, string lastName = null, string firstName = null, string fullName = null, string calculatedField = null)
+            string studentID = null, string enrollmentDate = null, string lastName = null, string firstMidName = null, string fullName = null, string fullNameCalculated = null)
         {
 
             ListParameters parameters = new ListParameters(fields, includes, orderBy, orderByDescending, page, pageSize, where, listDataSource, search);
 
             // Add custom filters
-            parameters.AddFilter("StudentId", studentId);
+            parameters.AddFilter("StudentID", studentID);
             parameters.AddFilter("EnrollmentDate", enrollmentDate);
             parameters.AddFilter("LastName", lastName);
-            parameters.AddFilter("FirstName", firstName);
+            parameters.AddFilter("FirstMidName", firstMidName);
             parameters.AddFilter("FullName", fullName);
-            parameters.AddFilter("CalculatedField", calculatedField);
+            parameters.AddFilter("FullNameCalculated", fullNameCalculated);
 
             return await ListImplementation(parameters);
         }
@@ -100,18 +98,18 @@ namespace Coalesce.TaskListSample.Web.Api
             string listDataSource = null,
             string search = null,
             // Custom fields for this object.
-            string studentId = null, string enrollmentDate = null, string lastName = null, string firstName = null, string fullName = null, string calculatedField = null)
+            string studentID = null, string enrollmentDate = null, string lastName = null, string firstMidName = null, string fullName = null, string fullNameCalculated = null)
         {
 
             ListParameters parameters = new ListParameters(where: where, listDataSource: listDataSource, search: search, fields: null);
 
             // Add custom filters
-            parameters.AddFilter("StudentId", studentId);
+            parameters.AddFilter("StudentID", studentID);
             parameters.AddFilter("EnrollmentDate", enrollmentDate);
             parameters.AddFilter("LastName", lastName);
-            parameters.AddFilter("FirstName", firstName);
+            parameters.AddFilter("FirstMidName", firstMidName);
             parameters.AddFilter("FullName", fullName);
-            parameters.AddFilter("CalculatedField", calculatedField);
+            parameters.AddFilter("FullNameCalculated", fullNameCalculated);
 
             return await CountImplementation(parameters);
         }
@@ -150,7 +148,7 @@ namespace Coalesce.TaskListSample.Web.Api
         public virtual async Task<SaveResult<StudentDtoGen>> Save(StudentDtoGen dto, string includes = null, string dataSource = null, bool returnObject = true)
         {
 
-            if (!dto.StudentId.HasValue && !Model.SecurityInfo.IsCreateAllowed(User))
+            if (!dto.StudentID.HasValue && !Model.SecurityInfo.IsCreateAllowed(User))
             {
                 var result = new SaveResult<StudentDtoGen>();
                 result.WasSuccessful = false;
@@ -158,7 +156,7 @@ namespace Coalesce.TaskListSample.Web.Api
                 Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 return result;
             }
-            else if (dto.StudentId.HasValue && !Model.SecurityInfo.IsEditAllowed(User))
+            else if (dto.StudentID.HasValue && !Model.SecurityInfo.IsEditAllowed(User))
             {
                 var result = new SaveResult<StudentDtoGen>();
                 result.WasSuccessful = false;
@@ -195,17 +193,17 @@ namespace Coalesce.TaskListSample.Web.Api
             string listDataSource = null,
             string search = null,
             // Custom fields for this object.
-            string studentId = null, string enrollmentDate = null, string lastName = null, string firstName = null, string fullName = null, string calculatedField = null)
+            string studentID = null, string enrollmentDate = null, string lastName = null, string firstMidName = null, string fullName = null, string fullNameCalculated = null)
         {
             ListParameters parameters = new ListParameters(null, "none", orderBy, orderByDescending, page, pageSize, where, listDataSource, search);
 
             // Add custom filters
-            parameters.AddFilter("StudentId", studentId);
+            parameters.AddFilter("StudentID", studentID);
             parameters.AddFilter("EnrollmentDate", enrollmentDate);
             parameters.AddFilter("LastName", lastName);
-            parameters.AddFilter("FirstName", firstName);
+            parameters.AddFilter("FirstMidName", firstMidName);
             parameters.AddFilter("FullName", fullName);
-            parameters.AddFilter("CalculatedField", calculatedField);
+            parameters.AddFilter("FullNameCalculated", fullNameCalculated);
 
             var listResult = await ListImplementation(parameters);
             var list = listResult.List.Cast<StudentDtoGen>();
@@ -227,17 +225,17 @@ namespace Coalesce.TaskListSample.Web.Api
             string listDataSource = null,
             string search = null,
             // Custom fields for this object.
-            string studentId = null, string enrollmentDate = null, string lastName = null, string firstName = null, string fullName = null, string calculatedField = null)
+            string studentID = null, string enrollmentDate = null, string lastName = null, string firstMidName = null, string fullName = null, string fullNameCalculated = null)
         {
             ListParameters parameters = new ListParameters(null, "none", orderBy, orderByDescending, page, pageSize, where, listDataSource, search);
 
             // Add custom filters
-            parameters.AddFilter("StudentId", studentId);
+            parameters.AddFilter("StudentID", studentID);
             parameters.AddFilter("EnrollmentDate", enrollmentDate);
             parameters.AddFilter("LastName", lastName);
-            parameters.AddFilter("FirstName", firstName);
+            parameters.AddFilter("FirstMidName", firstMidName);
             parameters.AddFilter("FullName", fullName);
-            parameters.AddFilter("CalculatedField", calculatedField);
+            parameters.AddFilter("FullNameCalculated", fullNameCalculated);
 
             var listResult = await ListImplementation(parameters);
             var list = listResult.List.Cast<StudentDtoGen>();
@@ -282,7 +280,7 @@ namespace Coalesce.TaskListSample.Web.Api
             foreach (var dto in list)
             {
                 // Check if creates/edits aren't allowed
-                if (!dto.StudentId.HasValue && !Model.SecurityInfo.IsCreateAllowed(User))
+                if (!dto.StudentID.HasValue && !Model.SecurityInfo.IsCreateAllowed(User))
                 {
                     var result = new SaveResult<StudentDtoGen>();
                     result.WasSuccessful = false;
@@ -290,7 +288,7 @@ namespace Coalesce.TaskListSample.Web.Api
                     Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                     resultList.Add(result);
                 }
-                else if (dto.StudentId.HasValue && !Model.SecurityInfo.IsEditAllowed(User))
+                else if (dto.StudentID.HasValue && !Model.SecurityInfo.IsEditAllowed(User))
                 {
                     var result = new SaveResult<StudentDtoGen>();
                     result.WasSuccessful = false;

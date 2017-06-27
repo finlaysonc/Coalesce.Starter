@@ -15,8 +15,8 @@
 <div style="padding: 10px 15px">
     <div class="clearfix">
         <h1  style="display: inline-block">
-            Application User List
-                <span style="font-size: .5em; padding-left: 20px;"><a href="~/ApplicationUser/Docs">API Docs</a></span>
+            Course Assignment List
+                <span style="font-size: .5em; padding-left: 20px;"><a href="~/CourseAssignment/Docs">API Docs</a></span>
         </h1>
         <span class="label label-info" data-bind="fadeVisible: isLoading()">Loading...</span>
     </div>
@@ -43,15 +43,15 @@
         <input class="form-control pull-right" style="width: 250px; margin-left: 20px" data-bind="textInput: search" placeholder="Search" />
 
         <div class="btn-group pull-right">
-                    <a href="~/ApplicationUser/CreateEdit?@(ViewBag.Query)" role="button" class="btn btn-sm btn-default "><i class="fa fa-plus"></i> Create</a>
+                    <a href="~/CourseAssignment/CreateEdit?@(ViewBag.Query)" role="button" class="btn btn-sm btn-default "><i class="fa fa-plus"></i> Create</a>
                 <button data-bind="click:load" class="btn btn-sm btn-default "><i class="fa fa-refresh"></i> Refresh</button>
                 @if (ViewBag.Editable)
                 {
-                <a href="~/ApplicationUser/Table?@(ViewBag.Query)" role="button" class="btn btn-sm btn-default "><i class="fa fa-lock"></i> Make Read-only</a>
+                <a href="~/CourseAssignment/Table?@(ViewBag.Query)" role="button" class="btn btn-sm btn-default "><i class="fa fa-lock"></i> Make Read-only</a>
                 }
                     else
                     {
-                    <a href="~/ApplicationUser/TableEdit?@ViewBag.Query" role="button" class="btn btn-sm btn-default "><i class="fa fa-pencil"></i> Make Editable</a>
+                    <a href="~/CourseAssignment/TableEdit?@ViewBag.Query" role="button" class="btn btn-sm btn-default "><i class="fa fa-pencil"></i> Make Editable</a>
                     }
                 <a href="#" role="button" class="btn btn-sm btn-default " data-bind="attr:{href: downloadAllCsvUrl}"><i class="fa fa-download"></i> CSV</a>
                     <button role="button" class="btn btn-sm btn-default " data-bind="click: csvUploadUi"><i class="fa fa-upload"></i> CSV</button>
@@ -64,9 +64,21 @@
             <table class="table @(ViewBag.Editable ? " editable" : "" )">
         <thead>
             <tr>
-                        <th class="sortable-header" data-bind="click: function(){orderByToggle('Name')}">
-                            Name
-                            <i class="pull-right fa" data-bind="css:{'fa-caret-up': orderBy() == 'Name', 'fa-caret-down': orderByDescending() == 'Name'}"></i>
+                        <th class="sortable-header" data-bind="click: function(){orderByToggle('InstructorID')}">
+                            Instructor I D
+                            <i class="pull-right fa" data-bind="css:{'fa-caret-up': orderBy() == 'InstructorID', 'fa-caret-down': orderByDescending() == 'InstructorID'}"></i>
+                        </th>
+                        <th class="sortable-header" data-bind="click: function(){orderByToggle('CourseID')}">
+                            Course I D
+                            <i class="pull-right fa" data-bind="css:{'fa-caret-up': orderBy() == 'CourseID', 'fa-caret-down': orderByDescending() == 'CourseID'}"></i>
+                        </th>
+                        <th class="sortable-header" data-bind="click: function(){orderByToggle('Instructor')}">
+                            Instructor
+                            <i class="pull-right fa" data-bind="css:{'fa-caret-up': orderBy() == 'Instructor', 'fa-caret-down': orderByDescending() == 'Instructor'}"></i>
+                        </th>
+                        <th class="sortable-header" data-bind="click: function(){orderByToggle('Course')}">
+                            Course
+                            <i class="pull-right fa" data-bind="css:{'fa-caret-up': orderBy() == 'Course', 'fa-caret-down': orderByDescending() == 'Course'}"></i>
                         </th>
                 <th style="width: 1%">
                 </th>
@@ -75,14 +87,20 @@
         </thead>
         <tbody>
             <!-- ko foreach: items -->
-            <tr data-bind="css: {'btn-warning': errorMessage()}, attr: {id: applicationUserId}">
+            <tr data-bind="css: {'btn-warning': errorMessage()}, attr: {id: courseAssignmentID}">
                     @if (@ViewBag.Editable)
                     {
-                        <td class="prop-name">@(Knockout.InputFor<Coalesce.TaskListSample.Data.Models.ApplicationUser>(p => p.Name))</td>
+                        <td class="prop-instructorID">@(Knockout.InputFor<Coalesce.TaskListSample.Data.Models.CourseAssignment>(p => p.InstructorID))</td>
+                        <td class="prop-courseID">@(Knockout.InputFor<Coalesce.TaskListSample.Data.Models.CourseAssignment>(p => p.CourseID))</td>
+                        <td class="prop-instructor">@(Knockout.SelectForObject<Coalesce.TaskListSample.Data.Models.CourseAssignment>(p => p.Instructor))</td>
+                        <td class="prop-course">@(Knockout.SelectForObject<Coalesce.TaskListSample.Data.Models.CourseAssignment>(p => p.Course))</td>
                     }
                     else
                     {
-                        <td class="prop-name">@(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.ApplicationUser>(p => p.Name, true))</td>
+                        <td class="prop-instructorID">@(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.CourseAssignment>(p => p.InstructorID, true))</td>
+                        <td class="prop-courseID">@(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.CourseAssignment>(p => p.CourseID, true))</td>
+                        <td class="prop-instructor">@(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.CourseAssignment>(p => p.Instructor, true))</td>
+                        <td class="prop-course">@(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.CourseAssignment>(p => p.Course, true))</td>
                     }
                 <td>
 
@@ -114,36 +132,36 @@
     {
 
     <script>
-        var applicationUserList = new ListViewModels.ApplicationUserList();
+        var courseAssignmentList = new ListViewModels.CourseAssignmentList();
         
         // Set up parent info based on the URL.
         @if (ViewBag.Query != null)
         {
-            @:applicationUserList.queryString = "@(ViewBag.Query)";
+            @:courseAssignmentList.queryString = "@(ViewBag.Query)";
         }
 
         // Save and restore values from the URL:
         var urlVariables = ['page', 'pageSize', 'search'];
         $.each(urlVariables, function(){
             var param = Coalesce.Utilities.GetUrlParameter(this);
-            if (param) {applicationUserList[this](param);}
+            if (param) {courseAssignmentList[this](param);}
         })
-        applicationUserList.isLoading.subscribe(function(){
+        courseAssignmentList.isLoading.subscribe(function(){
             var newUrl = window.location.href;
             
             $.each(urlVariables, function(){
-                var param = applicationUserList[this]();
+                var param = courseAssignmentList[this]();
                 newUrl = Coalesce.Utilities.SetUrlParameter(newUrl, this, param);
             })
             history.replaceState(null, document.title, newUrl);
         });
 
-        applicationUserList.isSavingAutomatically = false;
-        ko.applyBindings(applicationUserList);
-        applicationUserList.isSavingAutomatically = true;
+        courseAssignmentList.isSavingAutomatically = false;
+        ko.applyBindings(courseAssignmentList);
+        courseAssignmentList.isSavingAutomatically = true;
 
-        applicationUserList.includes = "ApplicationUserListGen";
-        applicationUserList.load();
+        courseAssignmentList.includes = "CourseAssignmentListGen";
+        courseAssignmentList.load();
 
     </script>
     }

@@ -61,9 +61,21 @@
                     <dd>
                         @(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Course>(p => p.Credits, false))
                     </dd>
-                    <dt>Instructors</dt>
+                    <dt>Department I D</dt>
                     <dd>
-                        <a data-bind='attr: {href: InstructorsListUrl}, text: instructors().length + " - Edit"' class='btn btn-default btn-sm'></a>
+                        @(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Course>(p => p.DepartmentID, false))
+                    </dd>
+                    <dt>Department</dt>
+                    <dd>
+                        @(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Course>(p => p.Department, false))
+                    </dd>
+                    <dt>Enrollments</dt>
+                    <dd>
+                        <a data-bind='attr: {href: EnrollmentsListUrl}, text: enrollments().length + " - Edit"' class='btn btn-default btn-sm'></a>
+                    </dd>
+                    <dt>Course Assignments</dt>
+                    <dd>
+                        <a data-bind='attr: {href: CourseAssignmentsListUrl}, text: courseAssignments().length + " - Edit"' class='btn btn-default btn-sm'></a>
                     </dd>
 
             </dl>

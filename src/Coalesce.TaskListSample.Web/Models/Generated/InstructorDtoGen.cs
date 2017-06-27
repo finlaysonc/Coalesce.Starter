@@ -21,12 +21,14 @@ namespace Coalesce.TaskListSample.Web.Models
     {
         public InstructorDtoGen() { }
 
-        public Int32? InstructorId { get; set; }
+        public Int32? InstructorID { get; set; }
         public DateTime? HireDate { get; set; }
+        public ICollection<CourseAssignmentDtoGen> CourseAssignments { get; set; }
+        public OfficeAssignmentDtoGen OfficeAssignment { get; set; }
         public System.String LastName { get; set; }
-        public System.String FirstName { get; set; }
+        public System.String FirstMidName { get; set; }
         public System.String FullName { get; set; }
-        public System.String CalculatedField { get; set; }
+        public System.String FullNameCalculated { get; set; }
 
         // Create a new version of this object or use it from the lookup.
         public static InstructorDtoGen Create(Coalesce.TaskListSample.Data.Models.Instructor obj, ClaimsPrincipal user = null, string includes = null,
@@ -60,12 +62,25 @@ namespace Coalesce.TaskListSample.Web.Models
             var newObject = new InstructorDtoGen();
             if (tree == null) objects.Add(obj, newObject);
             // Fill the properties of the object.
-            newObject.InstructorId = obj.InstructorId;
+            newObject.InstructorID = obj.InstructorID;
             newObject.HireDate = obj.HireDate;
             newObject.LastName = obj.LastName;
-            newObject.FirstName = obj.FirstName;
+            newObject.FirstMidName = obj.FirstMidName;
             newObject.FullName = obj.FullName;
-            newObject.CalculatedField = obj.CalculatedField;
+            newObject.FullNameCalculated = obj.FullNameCalculated;
+            var propValCourseAssignments = obj.CourseAssignments;
+            if (propValCourseAssignments != null && (tree == null || tree[nameof(newObject.CourseAssignments)] != null))
+            {
+                newObject.CourseAssignments = propValCourseAssignments.OrderBy("CourseAssignmentID ASC").Select(f => CourseAssignmentDtoGen.Create(f, user, includes, objects, tree?[nameof(newObject.CourseAssignments)])).ToList();
+            }
+            else if (propValCourseAssignments == null && tree?[nameof(newObject.CourseAssignments)] != null)
+            {
+                newObject.CourseAssignments = new CourseAssignmentDtoGen[0];
+            }
+
+            if (tree == null || tree[nameof(newObject.OfficeAssignment)] != null)
+                newObject.OfficeAssignment = OfficeAssignmentDtoGen.Create(obj.OfficeAssignment, user, includes, objects, tree?[nameof(newObject.OfficeAssignment)]);
+
             return newObject;
         }
 
@@ -96,7 +111,8 @@ namespace Coalesce.TaskListSample.Web.Models
 
             entity.HireDate = (DateTime)(HireDate ?? DateTime.Today);
             entity.LastName = LastName;
-            entity.FirstName = FirstName;
+            entity.FirstMidName = FirstMidName;
+            entity.FullName = FullName;
         }
 
     }

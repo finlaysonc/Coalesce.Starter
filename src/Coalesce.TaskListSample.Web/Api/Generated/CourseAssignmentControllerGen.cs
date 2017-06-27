@@ -20,23 +20,23 @@ namespace Coalesce.TaskListSample.Web.Api
 {
     [Route("api/[controller]")]
     [Authorize]
-    public partial class ApplicationUserController
-    : LocalBaseApiController<Coalesce.TaskListSample.Data.Models.ApplicationUser, ApplicationUserDtoGen>
+    public partial class CourseAssignmentController
+    : LocalBaseApiController<Coalesce.TaskListSample.Data.Models.CourseAssignment, CourseAssignmentDtoGen>
     {
         protected ClassViewModel Model;
 
-        public ApplicationUserController()
+        public CourseAssignmentController()
         {
-            Model = ReflectionRepository.Models.Single(m => m.Name == "ApplicationUser");
+            Model = ReflectionRepository.Models.Single(m => m.Name == "CourseAssignment");
         }
 
 
         /// <summary>
-        /// Returns ApplicationUserDtoGen
+        /// Returns CourseAssignmentDtoGen
         /// </summary>
         [HttpGet("list")]
         [Authorize]
-        public virtual async Task<GenericListResult<Coalesce.TaskListSample.Data.Models.ApplicationUser, ApplicationUserDtoGen>> List(
+        public virtual async Task<GenericListResult<Coalesce.TaskListSample.Data.Models.CourseAssignment, CourseAssignmentDtoGen>> List(
             string includes = null,
             string orderBy = null, string orderByDescending = null,
             int? page = null, int? pageSize = null,
@@ -44,17 +44,18 @@ namespace Coalesce.TaskListSample.Web.Api
             string listDataSource = null,
             string search = null,
             // Custom fields for this object.
-            string applicationUserId = null, string name = null)
+            string courseAssignmentID = null, string instructorID = null, string courseID = null)
         {
 
             ListParameters parameters = new ListParameters(null, includes, orderBy, orderByDescending, page, pageSize, where, listDataSource, search);
 
             // Add custom filters
-            parameters.AddFilter("ApplicationUserId", applicationUserId);
-            parameters.AddFilter("Name", name);
+            parameters.AddFilter("CourseAssignmentID", courseAssignmentID);
+            parameters.AddFilter("InstructorID", instructorID);
+            parameters.AddFilter("CourseID", courseID);
 
             var listResult = await ListImplementation(parameters);
-            return new GenericListResult<Coalesce.TaskListSample.Data.Models.ApplicationUser, ApplicationUserDtoGen>(listResult);
+            return new GenericListResult<Coalesce.TaskListSample.Data.Models.CourseAssignment, CourseAssignmentDtoGen>(listResult);
         }
 
         /// <summary>
@@ -71,14 +72,15 @@ namespace Coalesce.TaskListSample.Web.Api
             string listDataSource = null,
             string search = null,
             // Custom fields for this object.
-            string applicationUserId = null, string name = null)
+            string courseAssignmentID = null, string instructorID = null, string courseID = null)
         {
 
             ListParameters parameters = new ListParameters(fields, includes, orderBy, orderByDescending, page, pageSize, where, listDataSource, search);
 
             // Add custom filters
-            parameters.AddFilter("ApplicationUserId", applicationUserId);
-            parameters.AddFilter("Name", name);
+            parameters.AddFilter("CourseAssignmentID", courseAssignmentID);
+            parameters.AddFilter("InstructorID", instructorID);
+            parameters.AddFilter("CourseID", courseID);
 
             return await ListImplementation(parameters);
         }
@@ -90,14 +92,15 @@ namespace Coalesce.TaskListSample.Web.Api
             string listDataSource = null,
             string search = null,
             // Custom fields for this object.
-            string applicationUserId = null, string name = null)
+            string courseAssignmentID = null, string instructorID = null, string courseID = null)
         {
 
             ListParameters parameters = new ListParameters(where: where, listDataSource: listDataSource, search: search, fields: null);
 
             // Add custom filters
-            parameters.AddFilter("ApplicationUserId", applicationUserId);
-            parameters.AddFilter("Name", name);
+            parameters.AddFilter("CourseAssignmentID", courseAssignmentID);
+            parameters.AddFilter("InstructorID", instructorID);
+            parameters.AddFilter("CourseID", courseID);
 
             return await CountImplementation(parameters);
         }
@@ -112,7 +115,7 @@ namespace Coalesce.TaskListSample.Web.Api
 
         [HttpGet("get/{id}")]
         [Authorize]
-        public virtual async Task<ApplicationUserDtoGen> Get(string id, string includes = null, string dataSource = null)
+        public virtual async Task<CourseAssignmentDtoGen> Get(string id, string includes = null, string dataSource = null)
         {
 
             ListParameters listParams = new ListParameters(includes: includes, listDataSource: dataSource);
@@ -133,22 +136,22 @@ namespace Coalesce.TaskListSample.Web.Api
 
         [HttpPost("save")]
         [Authorize]
-        public virtual async Task<SaveResult<ApplicationUserDtoGen>> Save(ApplicationUserDtoGen dto, string includes = null, string dataSource = null, bool returnObject = true)
+        public virtual async Task<SaveResult<CourseAssignmentDtoGen>> Save(CourseAssignmentDtoGen dto, string includes = null, string dataSource = null, bool returnObject = true)
         {
 
-            if (!dto.ApplicationUserId.HasValue && !Model.SecurityInfo.IsCreateAllowed(User))
+            if (!dto.CourseAssignmentID.HasValue && !Model.SecurityInfo.IsCreateAllowed(User))
             {
-                var result = new SaveResult<ApplicationUserDtoGen>();
+                var result = new SaveResult<CourseAssignmentDtoGen>();
                 result.WasSuccessful = false;
-                result.Message = "Create not allowed on ApplicationUser objects.";
+                result.Message = "Create not allowed on CourseAssignment objects.";
                 Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 return result;
             }
-            else if (dto.ApplicationUserId.HasValue && !Model.SecurityInfo.IsEditAllowed(User))
+            else if (dto.CourseAssignmentID.HasValue && !Model.SecurityInfo.IsEditAllowed(User))
             {
-                var result = new SaveResult<ApplicationUserDtoGen>();
+                var result = new SaveResult<CourseAssignmentDtoGen>();
                 result.WasSuccessful = false;
-                result.Message = "Edit not allowed on ApplicationUser objects.";
+                result.Message = "Edit not allowed on CourseAssignment objects.";
                 Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 return result;
             }
@@ -158,19 +161,19 @@ namespace Coalesce.TaskListSample.Web.Api
 
         [HttpPost("AddToCollection")]
         [Authorize]
-        public virtual SaveResult<ApplicationUserDtoGen> AddToCollection(int id, string propertyName, int childId)
+        public virtual SaveResult<CourseAssignmentDtoGen> AddToCollection(int id, string propertyName, int childId)
         {
             return ChangeCollection(id, propertyName, childId, "Add");
         }
         [HttpPost("RemoveFromCollection")]
         [Authorize]
-        public virtual SaveResult<ApplicationUserDtoGen> RemoveFromCollection(int id, string propertyName, int childId)
+        public virtual SaveResult<CourseAssignmentDtoGen> RemoveFromCollection(int id, string propertyName, int childId)
         {
             return ChangeCollection(id, propertyName, childId, "Remove");
         }
 
         /// <summary>
-        /// Downloads CSV of ApplicationUserDtoGen
+        /// Downloads CSV of CourseAssignmentDtoGen
         /// </summary>
         [HttpGet("csvDownload")]
         [Authorize]
@@ -181,24 +184,25 @@ namespace Coalesce.TaskListSample.Web.Api
             string listDataSource = null,
             string search = null,
             // Custom fields for this object.
-            string applicationUserId = null, string name = null)
+            string courseAssignmentID = null, string instructorID = null, string courseID = null)
         {
             ListParameters parameters = new ListParameters(null, "none", orderBy, orderByDescending, page, pageSize, where, listDataSource, search);
 
             // Add custom filters
-            parameters.AddFilter("ApplicationUserId", applicationUserId);
-            parameters.AddFilter("Name", name);
+            parameters.AddFilter("CourseAssignmentID", courseAssignmentID);
+            parameters.AddFilter("InstructorID", instructorID);
+            parameters.AddFilter("CourseID", courseID);
 
             var listResult = await ListImplementation(parameters);
-            var list = listResult.List.Cast<ApplicationUserDtoGen>();
+            var list = listResult.List.Cast<CourseAssignmentDtoGen>();
             var csv = IntelliTect.Coalesce.Helpers.CsvHelper.CreateCsv(list);
 
             byte[] bytes = System.Text.Encoding.ASCII.GetBytes(csv);
-            return File(bytes, "application/x-msdownload", "ApplicationUser.csv");
+            return File(bytes, "application/x-msdownload", "CourseAssignment.csv");
         }
 
         /// <summary>
-        /// Returns CSV text of ApplicationUserDtoGen
+        /// Returns CSV text of CourseAssignmentDtoGen
         /// </summary>
         [HttpGet("csvText")]
         [Authorize]
@@ -209,16 +213,17 @@ namespace Coalesce.TaskListSample.Web.Api
             string listDataSource = null,
             string search = null,
             // Custom fields for this object.
-            string applicationUserId = null, string name = null)
+            string courseAssignmentID = null, string instructorID = null, string courseID = null)
         {
             ListParameters parameters = new ListParameters(null, "none", orderBy, orderByDescending, page, pageSize, where, listDataSource, search);
 
             // Add custom filters
-            parameters.AddFilter("ApplicationUserId", applicationUserId);
-            parameters.AddFilter("Name", name);
+            parameters.AddFilter("CourseAssignmentID", courseAssignmentID);
+            parameters.AddFilter("InstructorID", instructorID);
+            parameters.AddFilter("CourseID", courseID);
 
             var listResult = await ListImplementation(parameters);
-            var list = listResult.List.Cast<ApplicationUserDtoGen>();
+            var list = listResult.List.Cast<CourseAssignmentDtoGen>();
             var csv = IntelliTect.Coalesce.Helpers.CsvHelper.CreateCsv(list);
 
             return csv;
@@ -231,7 +236,7 @@ namespace Coalesce.TaskListSample.Web.Api
         /// </summary>
         [HttpPost("CsvUpload")]
         [Authorize]
-        public virtual async Task<IEnumerable<SaveResult<ApplicationUserDtoGen>>> CsvUpload(Microsoft.AspNetCore.Http.IFormFile file, bool hasHeader = true)
+        public virtual async Task<IEnumerable<SaveResult<CourseAssignmentDtoGen>>> CsvUpload(Microsoft.AspNetCore.Http.IFormFile file, bool hasHeader = true)
         {
             if (file != null && file.Length > 0)
             {
@@ -252,27 +257,27 @@ namespace Coalesce.TaskListSample.Web.Api
         /// </summary>
         [HttpPost("CsvSave")]
         [Authorize]
-        public virtual async Task<IEnumerable<SaveResult<ApplicationUserDtoGen>>> CsvSave(string csv, bool hasHeader = true)
+        public virtual async Task<IEnumerable<SaveResult<CourseAssignmentDtoGen>>> CsvSave(string csv, bool hasHeader = true)
         {
             // Get list from CSV
-            var list = IntelliTect.Coalesce.Helpers.CsvHelper.ReadCsv<ApplicationUserDtoGen>(csv, hasHeader);
-            var resultList = new List<SaveResult<ApplicationUserDtoGen>>();
+            var list = IntelliTect.Coalesce.Helpers.CsvHelper.ReadCsv<CourseAssignmentDtoGen>(csv, hasHeader);
+            var resultList = new List<SaveResult<CourseAssignmentDtoGen>>();
             foreach (var dto in list)
             {
                 // Check if creates/edits aren't allowed
-                if (!dto.ApplicationUserId.HasValue && !Model.SecurityInfo.IsCreateAllowed(User))
+                if (!dto.CourseAssignmentID.HasValue && !Model.SecurityInfo.IsCreateAllowed(User))
                 {
-                    var result = new SaveResult<ApplicationUserDtoGen>();
+                    var result = new SaveResult<CourseAssignmentDtoGen>();
                     result.WasSuccessful = false;
-                    result.Message = "Create not allowed on ApplicationUser objects.";
+                    result.Message = "Create not allowed on CourseAssignment objects.";
                     Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                     resultList.Add(result);
                 }
-                else if (dto.ApplicationUserId.HasValue && !Model.SecurityInfo.IsEditAllowed(User))
+                else if (dto.CourseAssignmentID.HasValue && !Model.SecurityInfo.IsEditAllowed(User))
                 {
-                    var result = new SaveResult<ApplicationUserDtoGen>();
+                    var result = new SaveResult<CourseAssignmentDtoGen>();
                     result.WasSuccessful = false;
-                    result.Message = "Edit not allowed on ApplicationUser objects.";
+                    result.Message = "Edit not allowed on CourseAssignment objects.";
                     Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                     resultList.Add(result);
                 }
@@ -285,7 +290,7 @@ namespace Coalesce.TaskListSample.Web.Api
             return resultList;
         }
 
-        protected override IQueryable<Coalesce.TaskListSample.Data.Models.ApplicationUser> GetListDataSource(ListParameters parameters)
+        protected override IQueryable<Coalesce.TaskListSample.Data.Models.CourseAssignment> GetListDataSource(ListParameters parameters)
         {
 
             return base.GetListDataSource(parameters);

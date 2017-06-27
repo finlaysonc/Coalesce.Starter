@@ -1,24 +1,21 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Coalesce.TaskListSample.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Coalesce.TaskListSample.Data.Models;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
+
 namespace Coalesce.TaskListSample.Data
 {
     public class AppDbContext : DbContext
     {
-        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
-
         public DbSet<Course> Courses { get; set; }
-        //public DbSet<Department> Departments { get; set; }
         public DbSet<Enrollment> Enrollments { get; set; }
-        public DbSet<Instructor> Instructors { get; set; }
-
         public DbSet<Student> Students { get; set; }
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<Instructor> Instructors { get; set; }
+        public DbSet<OfficeAssignment> OfficeAssignments { get; set; }
+        public DbSet<CourseAssignment> CourseAssignments { get; set; }
+
 
         public AppDbContext()
         {
@@ -28,22 +25,6 @@ namespace Coalesce.TaskListSample.Data
         {
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.ConfigureWarnings(warnings =>
-            {
-                warnings.Log(CoreEventId.IncludeIgnoredWarning);
-                warnings.Log(RelationalEventId.OpeningConnection);
-                warnings.Log(RelationalEventId.PossibleIncorrectResultsUsingLikeOperator);
-                warnings.Log(RelationalEventId.PossibleUnintendedUseOfEqualsWarning);
-                warnings.Log(RelationalEventId.QueryClientEvaluationWarning);
-                warnings.Throw(CoreEventId.IncludeIgnoredWarning);
-                warnings.Throw(RelationalEventId.OpeningConnection);
-                warnings.Throw(RelationalEventId.PossibleIncorrectResultsUsingLikeOperator);
-                warnings.Throw(RelationalEventId.PossibleUnintendedUseOfEqualsWarning);
-                warnings.Throw(RelationalEventId.QueryClientEvaluationWarning);
-            });
-        }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -57,9 +38,9 @@ namespace Coalesce.TaskListSample.Data
 
             builder.Entity<Student>()
                 .Property(p => p.FullName)
-                .HasComputedColumnSql($"[{nameof(Student.LastName)}] + ','  + [{nameof(Student.FirstName)}]");
+                .HasComputedColumnSql($"[{nameof(Student.LastName)}] + ','  + [{nameof(Student.FirstMidName)}]");
 
-            builder.EnableAutoHistory();
+//            builder.EnableAutoHistory();
         }
 
         /// <summary>
@@ -80,3 +61,4 @@ namespace Coalesce.TaskListSample.Data
         }
     }
 }
+

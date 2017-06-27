@@ -9,7 +9,7 @@ module ViewModels {
 	export class Instructor extends Coalesce.BaseViewModel<Instructor>
     {
         protected modelName = "Instructor";
-        protected primaryKeyName = "instructorId";
+        protected primaryKeyName = "instructorID";
         protected modelDisplayName = "Instructor";
 
         protected apiController = "/Instructor";
@@ -26,18 +26,28 @@ module ViewModels {
             = new Coalesce.ViewModelConfiguration<Instructor>(Instructor.coalesceConfig);
     
         // Observables
-        public instructorId: KnockoutObservable<number> = ko.observable(null);
+        public instructorID: KnockoutObservable<number> = ko.observable(null);
         public hireDate: KnockoutObservable<moment.Moment> = ko.observable(moment());
+        public courseAssignments: KnockoutObservableArray<ViewModels.CourseAssignment> = ko.observableArray([]);
+        public officeAssignment: KnockoutObservable<ViewModels.OfficeAssignment> = ko.observable(null);
         public lastName: KnockoutObservable<string> = ko.observable(null);
-        public firstName: KnockoutObservable<string> = ko.observable(null);
+        public firstMidName: KnockoutObservable<string> = ko.observable(null);
         public fullName: KnockoutObservable<string> = ko.observable(null);
-        public calculatedField: KnockoutObservable<string> = ko.observable(null);
+        public fullNameCalculated: KnockoutObservable<string> = ko.observable(null);
 
        
         // Create computeds for display for objects
+        public officeAssignmentText: () => string;
         
+        public addToCourseAssignments: (autoSave?: boolean) => CourseAssignment;
+        // List Object model for CourseAssignments. Allows for loading subsets of data.
+        public courseAssignmentsList: (loadImmediate?: boolean) => ListViewModels.CourseAssignmentList;
 
-                // Pops up a stock editor for this object.
+        public CourseAssignmentsListUrl: () => void; 
+                public officeAssignmentValidValues: KnockoutObservableArray<any> = ko.observableArray([]);
+        public loadOfficeAssignmentValidValues: (callback?: any) => JQueryPromise<any>;
+        // Pops up a stock editor for this object.
+        public showOfficeAssignmentEditor: (callback?: any) => void;
 
 
 
@@ -68,25 +78,35 @@ module ViewModels {
             // SetupValidation {
 			self.hireDate = self.hireDate.extend({ moment: { unix: true },  });
 			self.lastName = self.lastName.extend({ required: {params: true, message: "Last Name is required."} });
-			self.firstName = self.firstName.extend({ required: {params: true, message: "First Name is required."} });
+			self.firstMidName = self.firstMidName.extend({ required: {params: true, message: "First Name is required."} });
             
             self.errors = ko.validation.group([
-                self.instructorId,
+                self.instructorID,
                 self.hireDate,
+                self.courseAssignments,
+                self.officeAssignment,
                 self.lastName,
-                self.firstName,
+                self.firstMidName,
                 self.fullName,
-                self.calculatedField,
+                self.fullNameCalculated,
             ]);
             self.warnings = ko.validation.group([
             ]);
 
             // Computed Observable for edit URL
             self.editUrl = ko.computed(function() {
-                return self.coalesceConfig.baseViewUrl() + self.viewController + "/CreateEdit?id=" + self.instructorId();
+                return self.coalesceConfig.baseViewUrl() + self.viewController + "/CreateEdit?id=" + self.instructorID();
             });
 
             // Create computeds for display for objects
+			self.officeAssignmentText = ko.computed(function()
+			{   // If the object exists, use the text value. Otherwise show 'None'
+				if (self.officeAssignment() && self.officeAssignment().instructorID()) {
+					return self.officeAssignment().instructorID().toString();
+				} else {
+					return "None";
+				}
+			});
 
 
             // Load the ViewModel object from the DTO. 
@@ -96,11 +116,30 @@ module ViewModels {
 				if (!data || (!force && self.isLoading())) return;
 				self.isLoading(true);
 				// Set the ID 
-				self.myId = data.instructorId;
-				self.instructorId(data.instructorId);
+				self.myId = data.instructorID;
+				self.instructorID(data.instructorID);
 				// Load the lists of other objects
+                if (data.courseAssignments != null) {
+				    // Merge the incoming array
+				    Coalesce.KnockoutUtilities.RebuildArray(self.courseAssignments, data.courseAssignments, 'courseAssignmentID', CourseAssignment, self, allowCollectionDeletes);
+				} 
 				// Objects are loaded first so that they are available when the IDs get loaded.
 				// This handles the issue with populating select lists with correct data because we now have the object.
+				if (!data.officeAssignment) { 
+					if (data.instructorID != self.instructorID()) {
+                        self.officeAssignment(null);
+                    }
+                }else {
+                    if (!self.officeAssignment()){
+					    self.officeAssignment(new OfficeAssignment(data.officeAssignment, self));
+				    }else{
+					    self.officeAssignment().loadFromDto(data.officeAssignment);
+				    }
+                    if (self.parent && self.parent.myId == self.officeAssignment().myId && Coalesce.Utilities.getClassName(self.parent) == Coalesce.Utilities.getClassName(self.officeAssignment()))
+                    {
+                        self.parent.loadFromDto(data.officeAssignment, undefined, false);
+                    }
+                }
 
 				// The rest of the objects are loaded now.
                 if (data.hireDate == null) self.hireDate(null);
@@ -108,9 +147,9 @@ module ViewModels {
 				    self.hireDate(moment(data.hireDate));
 				}
 				self.lastName(data.lastName);
-				self.firstName(data.firstName);
+				self.firstMidName(data.firstMidName);
 				self.fullName(data.fullName);
-				self.calculatedField(data.calculatedField);
+				self.fullNameCalculated(data.fullNameCalculated);
                 if (self.afterLoadFromDto){
                     self.afterLoadFromDto();
                 }
@@ -122,33 +161,116 @@ module ViewModels {
     	    // Save the object into a DTO
 			self.saveToDto = function() {
 				var dto: any = {};
-				dto.instructorId = self.instructorId();
+				dto.instructorID = self.instructorID();
 
                 if (!self.hireDate()) dto.HireDate = null;
 				else dto.hireDate = self.hireDate().format('YYYY-MM-DDTHH:mm:ss');
     	        dto.lastName = self.lastName();
-    	        dto.firstName = self.firstName();
+    	        dto.firstMidName = self.firstMidName();
+    	        dto.fullName = self.fullName();
 
 				return dto;
 			}
 
             // Methods to add to child collections
 
+            self.addToCourseAssignments = function(autoSave = true) {
+                var newItem = new CourseAssignment();
+                if (typeof(autoSave) == 'boolean'){
+                    newItem.coalesceConfig.autoSaveEnabled(autoSave);
+                }
+                newItem.parent = self;
+                newItem.parentCollection = self.courseAssignments;
+                newItem.isExpanded(true);
+                newItem.instructorID(self.instructorID());
+                self.courseAssignments.push(newItem);
+                return newItem;
+            }
+            
+            // List Object model for CourseAssignments. Allows for loading subsets of data.
+            var _courseAssignmentsList: ListViewModels.CourseAssignmentList = null;
+            self.courseAssignmentsList = function(loadImmediate = true) {
+                if (!_courseAssignmentsList){
+                    _courseAssignmentsList = new ListViewModels.CourseAssignmentList();
+                    if (loadImmediate) loadCourseAssignmentsList();
+                    self.instructorID.subscribe(loadCourseAssignmentsList)
+                }
+                return _courseAssignmentsList;
+            }
+            function loadCourseAssignmentsList() {
+                if (self.instructorID()){
+                    _courseAssignmentsList.queryString = "InstructorID=" + self.instructorID();
+                    _courseAssignmentsList.load();
+                }
+            }
 
             // Save on changes
             function setupSubscriptions() {
                 self.hireDate.subscribe(self.autoSave);
+                self.officeAssignment.subscribe(self.autoSave);
                 self.lastName.subscribe(self.autoSave);
-                self.firstName.subscribe(self.autoSave);
+                self.firstMidName.subscribe(self.autoSave);
+                self.fullName.subscribe(self.autoSave);
             }  
 
             // Create variables for ListEditorApiUrls
+            self.CourseAssignmentsListUrl = ko.computed({
+                read: function() {
+                         return self.coalesceConfig.baseViewUrl() + '/CourseAssignment/Table?instructorID=' + self.instructorID();
+                },
+                deferEvaluation: true
+            });
             // Create loading function for Valid Values
 
+            self.loadOfficeAssignmentValidValues = function(callback) {
+                self.loadingValidValues++;
+                return $.ajax({
+                    method: "GET",
+                    url: self.coalesceConfig.baseApiUrl() + "/OfficeAssignment/CustomList?Fields=InstructorID,InstructorID",
+                    xhrFields: { withCredentials: true } })
+                .done(function(data) {
+                    self.isLoading(true);
+                    self.officeAssignmentValidValues(data.list);
+                    self.isLoading(false);
+                })
+                .fail(function(xhr) {
+                    var errorMsg = "Unknown Error";
+                    if (xhr.responseJSON && xhr.responseJSON.message) errorMsg = xhr.responseJSON.message;
+                    self.isLoading(false);
+
+                    if (self.coalesceConfig.showFailureAlerts())
+                        self.coalesceConfig.onFailure()(this, "Could not get Valid Values for OfficeAssignment: " + errorMsg);
+                })
+                .always(function(){
+                    self.loadingValidValues--;
+                    if (self.loadingValidValues === 0) {
+                        if ($.isFunction(callback)) {callback();}
+                    }
+                });
+            }
+            
+            self.showOfficeAssignmentEditor = function(callback: any) {
+                if (!self.officeAssignment()) {
+                    self.officeAssignment(new OfficeAssignment());
+                }
+                self.officeAssignment().showEditor(callback)
+            };
 
             // Load all child objects that are not loaded.
             self.loadChildren = function(callback) {
                 var loadingCount = 0;
+                // See if self.officeAssignment needs to be loaded.
+                if (self.officeAssignment() == null && self.instructorID() != null){
+                    loadingCount++;
+                    var officeAssignmentObj = new OfficeAssignment();
+                    officeAssignmentObj.load(self.instructorID(), function() {
+                        loadingCount--;
+                        self.officeAssignment(officeAssignmentObj);
+                        if (loadingCount == 0 && $.isFunction(callback)){
+                            callback();
+                        }
+                    });
+                }
                 if (loadingCount == 0 && $.isFunction(callback)){
                     callback();
                 }
@@ -157,7 +279,8 @@ module ViewModels {
 
             // Load all the valid values in parallel.
             self.loadValidValues = function(callback) {
-                if ($.isFunction(callback)) callback();
+                self.loadingValidValues = 0;
+                self.loadOfficeAssignmentValidValues(callback);
             };
 
             // Enumeration Lookups.

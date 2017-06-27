@@ -59,21 +59,29 @@
                     <dd>
                         @(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Instructor>(p => p.HireDate, false))
                     </dd>
+                    <dt>Course Assignments</dt>
+                    <dd>
+                        <a data-bind='attr: {href: CourseAssignmentsListUrl}, text: courseAssignments().length + " - Edit"' class='btn btn-default btn-sm'></a>
+                    </dd>
+                    <dt>Office Assignment</dt>
+                    <dd>
+                        @(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Instructor>(p => p.OfficeAssignment, false))
+                    </dd>
                     <dt>Last Name</dt>
                     <dd>
                         @(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Instructor>(p => p.LastName, false))
                     </dd>
                     <dt>First Name</dt>
                     <dd>
-                        @(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Instructor>(p => p.FirstName, false))
+                        @(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Instructor>(p => p.FirstMidName, false))
                     </dd>
                     <dt>Full Name</dt>
                     <dd>
                         @(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Instructor>(p => p.FullName, false))
                     </dd>
-                    <dt>Calculated Field</dt>
+                    <dt>Full Name Calculated</dt>
                     <dd>
-                        @(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Instructor>(p => p.CalculatedField, false))
+                        @(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Instructor>(p => p.FullNameCalculated, false))
                     </dd>
 
             </dl>

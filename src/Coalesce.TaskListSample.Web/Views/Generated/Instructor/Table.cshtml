@@ -68,21 +68,26 @@
                             Hire Date
                             <i class="pull-right fa" data-bind="css:{'fa-caret-up': orderBy() == 'HireDate', 'fa-caret-down': orderByDescending() == 'HireDate'}"></i>
                         </th>
+                        <th>Course Assignments</th>
+                        <th class="sortable-header" data-bind="click: function(){orderByToggle('OfficeAssignment')}">
+                            Office Assignment
+                            <i class="pull-right fa" data-bind="css:{'fa-caret-up': orderBy() == 'OfficeAssignment', 'fa-caret-down': orderByDescending() == 'OfficeAssignment'}"></i>
+                        </th>
                         <th class="sortable-header" data-bind="click: function(){orderByToggle('LastName')}">
                             Last Name
                             <i class="pull-right fa" data-bind="css:{'fa-caret-up': orderBy() == 'LastName', 'fa-caret-down': orderByDescending() == 'LastName'}"></i>
                         </th>
-                        <th class="sortable-header" data-bind="click: function(){orderByToggle('FirstName')}">
+                        <th class="sortable-header" data-bind="click: function(){orderByToggle('FirstMidName')}">
                             First Name
-                            <i class="pull-right fa" data-bind="css:{'fa-caret-up': orderBy() == 'FirstName', 'fa-caret-down': orderByDescending() == 'FirstName'}"></i>
+                            <i class="pull-right fa" data-bind="css:{'fa-caret-up': orderBy() == 'FirstMidName', 'fa-caret-down': orderByDescending() == 'FirstMidName'}"></i>
                         </th>
                         <th class="sortable-header" data-bind="click: function(){orderByToggle('FullName')}">
                             Full Name
                             <i class="pull-right fa" data-bind="css:{'fa-caret-up': orderBy() == 'FullName', 'fa-caret-down': orderByDescending() == 'FullName'}"></i>
                         </th>
-                        <th class="sortable-header" data-bind="click: function(){orderByToggle('CalculatedField')}">
-                            Calculated Field
-                            <i class="pull-right fa" data-bind="css:{'fa-caret-up': orderBy() == 'CalculatedField', 'fa-caret-down': orderByDescending() == 'CalculatedField'}"></i>
+                        <th class="sortable-header" data-bind="click: function(){orderByToggle('FullNameCalculated')}">
+                            Full Name Calculated
+                            <i class="pull-right fa" data-bind="css:{'fa-caret-up': orderBy() == 'FullNameCalculated', 'fa-caret-down': orderByDescending() == 'FullNameCalculated'}"></i>
                         </th>
                 <th style="width: 1%">
                 </th>
@@ -91,22 +96,26 @@
         </thead>
         <tbody>
             <!-- ko foreach: items -->
-            <tr data-bind="css: {'btn-warning': errorMessage()}, attr: {id: instructorId}">
+            <tr data-bind="css: {'btn-warning': errorMessage()}, attr: {id: instructorID}">
                     @if (@ViewBag.Editable)
                     {
                         <td class="prop-hireDate">@(Knockout.InputFor<Coalesce.TaskListSample.Data.Models.Instructor>(p => p.HireDate))</td>
+                        <td class="prop-courseAssignments"><a data-bind='attr: {href: CourseAssignmentsListUrl}, text: courseAssignments().length + " - Edit"' class='btn btn-default btn-sm'></a></td>
+                        <td class="prop-officeAssignment">@(Knockout.SelectForObject<Coalesce.TaskListSample.Data.Models.Instructor>(p => p.OfficeAssignment))</td>
                         <td class="prop-lastName">@(Knockout.InputFor<Coalesce.TaskListSample.Data.Models.Instructor>(p => p.LastName))</td>
-                        <td class="prop-firstName">@(Knockout.InputFor<Coalesce.TaskListSample.Data.Models.Instructor>(p => p.FirstName))</td>
-                        <td class="prop-fullName">@(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Instructor>(p => p.FullName, true))</td>
-                        <td class="prop-calculatedField">@(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Instructor>(p => p.CalculatedField, true))</td>
+                        <td class="prop-firstMidName">@(Knockout.InputFor<Coalesce.TaskListSample.Data.Models.Instructor>(p => p.FirstMidName))</td>
+                        <td class="prop-fullName">@(Knockout.InputFor<Coalesce.TaskListSample.Data.Models.Instructor>(p => p.FullName))</td>
+                        <td class="prop-fullNameCalculated">@(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Instructor>(p => p.FullNameCalculated, true))</td>
                     }
                     else
                     {
                         <td class="prop-hireDate">@(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Instructor>(p => p.HireDate, true))</td>
+                        <td class="prop-courseAssignments"><a data-bind='attr: {href: CourseAssignmentsListUrl}, text: courseAssignments().length + " - Edit"' class='btn btn-default btn-sm'></a></td>
+                        <td class="prop-officeAssignment">@(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Instructor>(p => p.OfficeAssignment, true))</td>
                         <td class="prop-lastName">@(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Instructor>(p => p.LastName, true))</td>
-                        <td class="prop-firstName">@(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Instructor>(p => p.FirstName, true))</td>
+                        <td class="prop-firstMidName">@(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Instructor>(p => p.FirstMidName, true))</td>
                         <td class="prop-fullName">@(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Instructor>(p => p.FullName, true))</td>
-                        <td class="prop-calculatedField">@(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Instructor>(p => p.CalculatedField, true))</td>
+                        <td class="prop-fullNameCalculated">@(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Instructor>(p => p.FullNameCalculated, true))</td>
                     }
                 <td>
 

@@ -21,10 +21,13 @@ namespace Coalesce.TaskListSample.Web.Models
     {
         public CourseDtoGen() { }
 
-        public Int32? CourseId { get; set; }
+        public Int32? CourseID { get; set; }
         public System.String Title { get; set; }
         public Int32? Credits { get; set; }
-        public ICollection<InstructorDtoGen> Instructors { get; set; }
+        public Int32? DepartmentID { get; set; }
+        public DepartmentDtoGen Department { get; set; }
+        public ICollection<EnrollmentDtoGen> Enrollments { get; set; }
+        public ICollection<CourseAssignmentDtoGen> CourseAssignments { get; set; }
 
         // Create a new version of this object or use it from the lookup.
         public static CourseDtoGen Create(Coalesce.TaskListSample.Data.Models.Course obj, ClaimsPrincipal user = null, string includes = null,
@@ -58,17 +61,31 @@ namespace Coalesce.TaskListSample.Web.Models
             var newObject = new CourseDtoGen();
             if (tree == null) objects.Add(obj, newObject);
             // Fill the properties of the object.
-            newObject.CourseId = obj.CourseId;
+            newObject.CourseID = obj.CourseID;
             newObject.Title = obj.Title;
             newObject.Credits = obj.Credits;
-            var propValInstructors = obj.Instructors;
-            if (propValInstructors != null && (tree == null || tree[nameof(newObject.Instructors)] != null))
+            newObject.DepartmentID = obj.DepartmentID;
+            if (tree == null || tree[nameof(newObject.Department)] != null)
+                newObject.Department = DepartmentDtoGen.Create(obj.Department, user, includes, objects, tree?[nameof(newObject.Department)]);
+
+            var propValEnrollments = obj.Enrollments;
+            if (propValEnrollments != null && (tree == null || tree[nameof(newObject.Enrollments)] != null))
             {
-                newObject.Instructors = propValInstructors.OrderBy("InstructorId ASC").Select(f => InstructorDtoGen.Create(f, user, includes, objects, tree?[nameof(newObject.Instructors)])).ToList();
+                newObject.Enrollments = propValEnrollments.OrderBy("EnrollmentID ASC").Select(f => EnrollmentDtoGen.Create(f, user, includes, objects, tree?[nameof(newObject.Enrollments)])).ToList();
             }
-            else if (propValInstructors == null && tree?[nameof(newObject.Instructors)] != null)
+            else if (propValEnrollments == null && tree?[nameof(newObject.Enrollments)] != null)
             {
-                newObject.Instructors = new InstructorDtoGen[0];
+                newObject.Enrollments = new EnrollmentDtoGen[0];
+            }
+
+            var propValCourseAssignments = obj.CourseAssignments;
+            if (propValCourseAssignments != null && (tree == null || tree[nameof(newObject.CourseAssignments)] != null))
+            {
+                newObject.CourseAssignments = propValCourseAssignments.OrderBy("CourseAssignmentID ASC").Select(f => CourseAssignmentDtoGen.Create(f, user, includes, objects, tree?[nameof(newObject.CourseAssignments)])).ToList();
+            }
+            else if (propValCourseAssignments == null && tree?[nameof(newObject.CourseAssignments)] != null)
+            {
+                newObject.CourseAssignments = new CourseAssignmentDtoGen[0];
             }
 
             return newObject;
@@ -101,6 +118,7 @@ namespace Coalesce.TaskListSample.Web.Models
 
             entity.Title = Title;
             entity.Credits = (Int32)(Credits ?? 0);
+            entity.DepartmentID = (Int32)(DepartmentID ?? 0);
         }
 
     }

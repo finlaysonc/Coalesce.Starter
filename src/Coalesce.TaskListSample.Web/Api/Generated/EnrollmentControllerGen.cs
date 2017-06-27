@@ -44,15 +44,15 @@ namespace Coalesce.TaskListSample.Web.Api
             string listDataSource = null,
             string search = null,
             // Custom fields for this object.
-            string enrollmentId = null, string courseId = null, string studentId = null)
+            string enrollmentID = null, string courseID = null, string studentID = null)
         {
 
             ListParameters parameters = new ListParameters(null, includes, orderBy, orderByDescending, page, pageSize, where, listDataSource, search);
 
             // Add custom filters
-            parameters.AddFilter("EnrollmentId", enrollmentId);
-            parameters.AddFilter("CourseId", courseId);
-            parameters.AddFilter("StudentId", studentId);
+            parameters.AddFilter("EnrollmentID", enrollmentID);
+            parameters.AddFilter("CourseID", courseID);
+            parameters.AddFilter("StudentID", studentID);
 
             var listResult = await ListImplementation(parameters);
             return new GenericListResult<Coalesce.TaskListSample.Data.Models.Enrollment, EnrollmentDtoGen>(listResult);
@@ -72,15 +72,15 @@ namespace Coalesce.TaskListSample.Web.Api
             string listDataSource = null,
             string search = null,
             // Custom fields for this object.
-            string enrollmentId = null, string courseId = null, string studentId = null)
+            string enrollmentID = null, string courseID = null, string studentID = null)
         {
 
             ListParameters parameters = new ListParameters(fields, includes, orderBy, orderByDescending, page, pageSize, where, listDataSource, search);
 
             // Add custom filters
-            parameters.AddFilter("EnrollmentId", enrollmentId);
-            parameters.AddFilter("CourseId", courseId);
-            parameters.AddFilter("StudentId", studentId);
+            parameters.AddFilter("EnrollmentID", enrollmentID);
+            parameters.AddFilter("CourseID", courseID);
+            parameters.AddFilter("StudentID", studentID);
 
             return await ListImplementation(parameters);
         }
@@ -92,15 +92,15 @@ namespace Coalesce.TaskListSample.Web.Api
             string listDataSource = null,
             string search = null,
             // Custom fields for this object.
-            string enrollmentId = null, string courseId = null, string studentId = null)
+            string enrollmentID = null, string courseID = null, string studentID = null)
         {
 
             ListParameters parameters = new ListParameters(where: where, listDataSource: listDataSource, search: search, fields: null);
 
             // Add custom filters
-            parameters.AddFilter("EnrollmentId", enrollmentId);
-            parameters.AddFilter("CourseId", courseId);
-            parameters.AddFilter("StudentId", studentId);
+            parameters.AddFilter("EnrollmentID", enrollmentID);
+            parameters.AddFilter("CourseID", courseID);
+            parameters.AddFilter("StudentID", studentID);
 
             return await CountImplementation(parameters);
         }
@@ -139,7 +139,7 @@ namespace Coalesce.TaskListSample.Web.Api
         public virtual async Task<SaveResult<EnrollmentDtoGen>> Save(EnrollmentDtoGen dto, string includes = null, string dataSource = null, bool returnObject = true)
         {
 
-            if (!dto.EnrollmentId.HasValue && !Model.SecurityInfo.IsCreateAllowed(User))
+            if (!dto.EnrollmentID.HasValue && !Model.SecurityInfo.IsCreateAllowed(User))
             {
                 var result = new SaveResult<EnrollmentDtoGen>();
                 result.WasSuccessful = false;
@@ -147,7 +147,7 @@ namespace Coalesce.TaskListSample.Web.Api
                 Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 return result;
             }
-            else if (dto.EnrollmentId.HasValue && !Model.SecurityInfo.IsEditAllowed(User))
+            else if (dto.EnrollmentID.HasValue && !Model.SecurityInfo.IsEditAllowed(User))
             {
                 var result = new SaveResult<EnrollmentDtoGen>();
                 result.WasSuccessful = false;
@@ -184,14 +184,14 @@ namespace Coalesce.TaskListSample.Web.Api
             string listDataSource = null,
             string search = null,
             // Custom fields for this object.
-            string enrollmentId = null, string courseId = null, string studentId = null)
+            string enrollmentID = null, string courseID = null, string studentID = null)
         {
             ListParameters parameters = new ListParameters(null, "none", orderBy, orderByDescending, page, pageSize, where, listDataSource, search);
 
             // Add custom filters
-            parameters.AddFilter("EnrollmentId", enrollmentId);
-            parameters.AddFilter("CourseId", courseId);
-            parameters.AddFilter("StudentId", studentId);
+            parameters.AddFilter("EnrollmentID", enrollmentID);
+            parameters.AddFilter("CourseID", courseID);
+            parameters.AddFilter("StudentID", studentID);
 
             var listResult = await ListImplementation(parameters);
             var list = listResult.List.Cast<EnrollmentDtoGen>();
@@ -213,14 +213,14 @@ namespace Coalesce.TaskListSample.Web.Api
             string listDataSource = null,
             string search = null,
             // Custom fields for this object.
-            string enrollmentId = null, string courseId = null, string studentId = null)
+            string enrollmentID = null, string courseID = null, string studentID = null)
         {
             ListParameters parameters = new ListParameters(null, "none", orderBy, orderByDescending, page, pageSize, where, listDataSource, search);
 
             // Add custom filters
-            parameters.AddFilter("EnrollmentId", enrollmentId);
-            parameters.AddFilter("CourseId", courseId);
-            parameters.AddFilter("StudentId", studentId);
+            parameters.AddFilter("EnrollmentID", enrollmentID);
+            parameters.AddFilter("CourseID", courseID);
+            parameters.AddFilter("StudentID", studentID);
 
             var listResult = await ListImplementation(parameters);
             var list = listResult.List.Cast<EnrollmentDtoGen>();
@@ -265,7 +265,7 @@ namespace Coalesce.TaskListSample.Web.Api
             foreach (var dto in list)
             {
                 // Check if creates/edits aren't allowed
-                if (!dto.EnrollmentId.HasValue && !Model.SecurityInfo.IsCreateAllowed(User))
+                if (!dto.EnrollmentID.HasValue && !Model.SecurityInfo.IsCreateAllowed(User))
                 {
                     var result = new SaveResult<EnrollmentDtoGen>();
                     result.WasSuccessful = false;
@@ -273,7 +273,7 @@ namespace Coalesce.TaskListSample.Web.Api
                     Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                     resultList.Add(result);
                 }
-                else if (dto.EnrollmentId.HasValue && !Model.SecurityInfo.IsEditAllowed(User))
+                else if (dto.EnrollmentID.HasValue && !Model.SecurityInfo.IsEditAllowed(User))
                 {
                     var result = new SaveResult<EnrollmentDtoGen>();
                     result.WasSuccessful = false;

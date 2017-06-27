@@ -17,15 +17,15 @@ module ListViewModels {
 
         protected apiController = "/Enrollment";
 
-        public modelKeyName = "enrollmentId";
+        public modelKeyName = "enrollmentID";
         public dataSources = EnrollmentDataSources;
         public itemClass = ViewModels.Enrollment;
 
         public query: {
             where?: string;
-            enrollmentId?:number;
-            courseId?:number;
-            studentId?:number;
+            enrollmentID?:number;
+            courseID?:number;
+            studentID?:number;
         } = null;
 
         // The custom code to run in order to pull the initial datasource to use for the collection that should be returned

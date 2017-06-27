@@ -5,8 +5,8 @@
 <div style="padding: 10px 15px">
     <div class="clearfix">
         <h1 style="display: inline-block">
-            Application User List
-                <span style="font-size: .5em; padding-left: 20px;"><a href="~/ApplicationUser/Docs">API Docs</a></span>
+            Department List
+                <span style="font-size: .5em; padding-left: 20px;"><a href="~/Department/Docs">API Docs</a></span>
         </h1>
         <span class="label label-info" data-bind="fadeVisible: isLoading()">Loading...</span>
     </div>
@@ -33,7 +33,7 @@
         <input class="form-control pull-right" style="width: 250px; margin-left: 20px" data-bind="textInput: search" placeholder="Search" />
 
         <div class="btn-group pull-right">
-                    <a href="~/ApplicationUser/CreateEdit?@(ViewBag.Query)" role="button" class="btn btn-sm btn-default "><i class="fa fa-plus"></i> Create</a>
+                    <a href="~/Department/CreateEdit?@(ViewBag.Query)" role="button" class="btn btn-sm btn-default "><i class="fa fa-plus"></i> Create</a>
                 <button data-bind="click:load" class="btn btn-sm btn-default "><i class="fa fa-refresh"></i> Refresh</button>
                 <a href="#" role="button" class="btn btn-sm btn-default " data-bind="attr:{href: downloadAllCsvUrl}"><i class="fa fa-download"></i> CSV</a>
                     <button role="button" class="btn btn-sm btn-default " data-bind="click: csvUploadUi"><i class="fa fa-upload"></i> CSV</button>
@@ -55,7 +55,31 @@
             <dl>
                     <dt>Name</dt>
                     <dd>
-                        @(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.ApplicationUser>(p => p.Name, false))
+                        @(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Department>(p => p.Name, false))
+                    </dd>
+                    <dt>Budget</dt>
+                    <dd>
+                        @(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Department>(p => p.Budget, false))
+                    </dd>
+                    <dt>Start Date</dt>
+                    <dd>
+                        @(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Department>(p => p.StartDate, false))
+                    </dd>
+                    <dt>Instructor I D</dt>
+                    <dd>
+                        @(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Department>(p => p.InstructorID, false))
+                    </dd>
+                    <dt>Row Version</dt>
+                    <dd>
+                        @(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Department>(p => p.RowVersion, false))
+                    </dd>
+                    <dt>Administrator</dt>
+                    <dd>
+                        @(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Department>(p => p.Administrator, false))
+                    </dd>
+                    <dt>Courses</dt>
+                    <dd>
+                        <a data-bind='attr: {href: CoursesListUrl}, text: courses().length + " - Edit"' class='btn btn-default btn-sm'></a>
                     </dd>
 
             </dl>
@@ -89,36 +113,36 @@
     {
 
     <script>
-        var applicationUserList = new ListViewModels.ApplicationUserList();
+        var departmentList = new ListViewModels.DepartmentList();
         
         // Set up parent info based on the URL.
         @if (ViewBag.Query != null)
         {
-            @:applicationUserList.queryString = "@(ViewBag.Query)";
+            @:departmentList.queryString = "@(ViewBag.Query)";
         }
 
         // Save and restore values from the URL:
         var urlVariables = ['page', 'pageSize', 'search'];
         $.each(urlVariables, function(){
             var param = Coalesce.Utilities.GetUrlParameter(this);
-            if (param) {applicationUserList[this](param);}
+            if (param) {departmentList[this](param);}
         })
-        applicationUserList.isLoading.subscribe(function(){
+        departmentList.isLoading.subscribe(function(){
             var newUrl = window.location.href;
             
             $.each(urlVariables, function(){
-                var param = applicationUserList[this]();
+                var param = departmentList[this]();
                 newUrl = Coalesce.Utilities.SetUrlParameter(newUrl, this, param);
             })
             history.replaceState(null, document.title, newUrl);
         });
 
-        applicationUserList.isSavingAutomatically = false;
-        ko.applyBindings(applicationUserList);
-        applicationUserList.isSavingAutomatically = true;
+        departmentList.isSavingAutomatically = false;
+        ko.applyBindings(departmentList);
+        departmentList.isSavingAutomatically = true;
 
-        applicationUserList.includes = "ApplicationUserListGen";
-        applicationUserList.load();
+        departmentList.includes = "DepartmentListGen";
+        departmentList.load();
 
     </script>
     }

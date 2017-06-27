@@ -17,6 +17,7 @@ using Newtonsoft.Json;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Coalesce.TaskListSample.Data.Data;
 
 namespace Coalesce.TaskListSample.Web
 {
@@ -152,7 +153,8 @@ namespace Coalesce.TaskListSample.Web
 
             // Run database migrations.
             AppDbContext db = app.ApplicationServices.GetService<AppDbContext>();
-            db.Initialize();
+            DbInitializer.Initialize(db);
+            //db.Initialize();
         }
     }
 }

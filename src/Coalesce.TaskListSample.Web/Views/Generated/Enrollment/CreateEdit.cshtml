@@ -16,6 +16,12 @@
                 </div>
             </div>
                     <div class="form-group">
+                        <label class="col-md-4 control-label">Course I D</label>
+<div class="col-md-8 prop-courseID">@(Knockout.InputFor<Coalesce.TaskListSample.Data.Models.Enrollment>(p => p.CourseID))</div>                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Student I D</label>
+<div class="col-md-8 prop-studentID">@(Knockout.InputFor<Coalesce.TaskListSample.Data.Models.Enrollment>(p => p.StudentID))</div>                    </div>
+                    <div class="form-group">
                         <label class="col-md-4 control-label">Grade</label>
 <div class="col-md-8 prop-grade">@(Knockout.SelectFor<Coalesce.TaskListSample.Data.Models.Enrollment>(p => p.Grade))</div>                    </div>
                     <div class="form-group">

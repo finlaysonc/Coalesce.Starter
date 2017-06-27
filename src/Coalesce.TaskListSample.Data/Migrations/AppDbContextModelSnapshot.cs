@@ -16,61 +16,95 @@ namespace Coalesce.TaskListSample.Data.Migrations
                 .HasAnnotation("ProductVersion", "1.1.2")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Coalesce.TaskListSample.Data.Models.ApplicationUser", b =>
-                {
-                    b.Property<int>("ApplicationUserId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("ApplicationUserId");
-
-                    b.ToTable("ApplicationUsers");
-                });
-
             modelBuilder.Entity("Coalesce.TaskListSample.Data.Models.Course", b =>
                 {
-                    b.Property<int>("CourseId")
+                    b.Property<int>("CourseID")
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("Credits");
 
+                    b.Property<int>("DepartmentID");
+
                     b.Property<string>("Title")
                         .HasMaxLength(50);
 
-                    b.HasKey("CourseId");
+                    b.HasKey("CourseID");
+
+                    b.HasIndex("DepartmentID");
 
                     b.ToTable("Courses");
                 });
 
-            modelBuilder.Entity("Coalesce.TaskListSample.Data.Models.Enrollment", b =>
+            modelBuilder.Entity("Coalesce.TaskListSample.Data.Models.CourseAssignment", b =>
                 {
-                    b.Property<int>("EnrollmentId")
+                    b.Property<int>("CourseAssignmentID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("CourseId");
+                    b.Property<int>("CourseID");
+
+                    b.Property<int>("InstructorID");
+
+                    b.HasKey("CourseAssignmentID");
+
+                    b.HasIndex("CourseID");
+
+                    b.HasIndex("InstructorID");
+
+                    b.ToTable("CourseAssignments");
+                });
+
+            modelBuilder.Entity("Coalesce.TaskListSample.Data.Models.Department", b =>
+                {
+                    b.Property<int>("DepartmentID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<decimal>("Budget")
+                        .HasColumnType("money");
+
+                    b.Property<int?>("InstructorID");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(50);
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
+
+                    b.Property<DateTime>("StartDate");
+
+                    b.HasKey("DepartmentID");
+
+                    b.HasIndex("InstructorID");
+
+                    b.ToTable("Departments");
+                });
+
+            modelBuilder.Entity("Coalesce.TaskListSample.Data.Models.Enrollment", b =>
+                {
+                    b.Property<int>("EnrollmentID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("CourseID");
 
                     b.Property<int?>("Grade");
 
-                    b.Property<int>("StudentId");
+                    b.Property<int>("StudentID");
 
-                    b.HasKey("EnrollmentId");
+                    b.HasKey("EnrollmentID");
 
-                    b.HasIndex("CourseId");
+                    b.HasIndex("CourseID");
 
-                    b.HasIndex("StudentId");
+                    b.HasIndex("StudentID");
 
                     b.ToTable("Enrollments");
                 });
 
             modelBuilder.Entity("Coalesce.TaskListSample.Data.Models.Instructor", b =>
                 {
-                    b.Property<int>("InstructorId")
+                    b.Property<int>("InstructorID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("CourseId");
-
-                    b.Property<string>("FirstName")
+                    b.Property<string>("FirstMidName")
                         .IsRequired()
                         .HasMaxLength(50);
 
@@ -82,80 +116,88 @@ namespace Coalesce.TaskListSample.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(50);
 
-                    b.Property<DateTime?>("TerminationDate");
-
-                    b.HasKey("InstructorId");
-
-                    b.HasIndex("CourseId");
+                    b.HasKey("InstructorID");
 
                     b.ToTable("Instructors");
                 });
 
+            modelBuilder.Entity("Coalesce.TaskListSample.Data.Models.OfficeAssignment", b =>
+                {
+                    b.Property<int>("InstructorID");
+
+                    b.Property<string>("Location")
+                        .HasMaxLength(50);
+
+                    b.HasKey("InstructorID");
+
+                    b.ToTable("OfficeAssignments");
+                });
+
             modelBuilder.Entity("Coalesce.TaskListSample.Data.Models.Student", b =>
                 {
-                    b.Property<int>("StudentId")
+                    b.Property<int>("StudentID")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("EnrollmentDate");
 
-                    b.Property<string>("FirstName")
+                    b.Property<string>("FirstMidName")
                         .IsRequired()
                         .HasMaxLength(50);
 
                     b.Property<string>("FullName")
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasComputedColumnSql("[LastName] + ','  + [FirstName]");
+                        .HasComputedColumnSql("[LastName] + ','  + [FirstMidName]");
 
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(50);
 
-                    b.HasKey("StudentId");
+                    b.HasKey("StudentID");
 
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("Microsoft.EntityFrameworkCore.Internal.AutoHistory", b =>
+            modelBuilder.Entity("Coalesce.TaskListSample.Data.Models.Course", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.HasOne("Coalesce.TaskListSample.Data.Models.Department", "Department")
+                        .WithMany("Courses")
+                        .HasForeignKey("DepartmentID");
+                });
 
-                    b.Property<string>("Changed")
-                        .HasMaxLength(2048);
+            modelBuilder.Entity("Coalesce.TaskListSample.Data.Models.CourseAssignment", b =>
+                {
+                    b.HasOne("Coalesce.TaskListSample.Data.Models.Course", "Course")
+                        .WithMany("CourseAssignments")
+                        .HasForeignKey("CourseID");
 
-                    b.Property<DateTime>("Created");
+                    b.HasOne("Coalesce.TaskListSample.Data.Models.Instructor", "Instructor")
+                        .WithMany("CourseAssignments")
+                        .HasForeignKey("InstructorID");
+                });
 
-                    b.Property<int>("Kind");
-
-                    b.Property<string>("RowId")
-                        .IsRequired()
-                        .HasMaxLength(50);
-
-                    b.Property<string>("TableName")
-                        .IsRequired()
-                        .HasMaxLength(128);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AutoHistory");
+            modelBuilder.Entity("Coalesce.TaskListSample.Data.Models.Department", b =>
+                {
+                    b.HasOne("Coalesce.TaskListSample.Data.Models.Instructor", "Administrator")
+                        .WithMany()
+                        .HasForeignKey("InstructorID");
                 });
 
             modelBuilder.Entity("Coalesce.TaskListSample.Data.Models.Enrollment", b =>
                 {
                     b.HasOne("Coalesce.TaskListSample.Data.Models.Course", "Course")
-                        .WithMany()
-                        .HasForeignKey("CourseId");
+                        .WithMany("Enrollments")
+                        .HasForeignKey("CourseID");
 
                     b.HasOne("Coalesce.TaskListSample.Data.Models.Student", "Student")
                         .WithMany("Enrollments")
-                        .HasForeignKey("StudentId");
+                        .HasForeignKey("StudentID");
                 });
 
-            modelBuilder.Entity("Coalesce.TaskListSample.Data.Models.Instructor", b =>
+            modelBuilder.Entity("Coalesce.TaskListSample.Data.Models.OfficeAssignment", b =>
                 {
-                    b.HasOne("Coalesce.TaskListSample.Data.Models.Course")
-                        .WithMany("Instructors")
-                        .HasForeignKey("CourseId");
+                    b.HasOne("Coalesce.TaskListSample.Data.Models.Instructor", "Instructor")
+                        .WithOne("OfficeAssignment")
+                        .HasForeignKey("Coalesce.TaskListSample.Data.Models.OfficeAssignment", "InstructorID");
                 });
         }
     }

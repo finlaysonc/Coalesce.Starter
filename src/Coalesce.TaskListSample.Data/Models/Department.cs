@@ -7,6 +7,7 @@ namespace Coalesce.TaskListSample.Data.Models
 {
     public class Department
     {
+        [Key]
         public int DepartmentID { get; set; }
 
         [StringLength(50, MinimumLength = 3)]
@@ -23,7 +24,10 @@ namespace Coalesce.TaskListSample.Data.Models
 
         public int? InstructorID { get; set; }
 
-        public  Instructor Administrator { get; set; }
-        public  ICollection<Course> Courses { get; set; }
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
+
+        public Instructor Administrator { get; set; }
+        public ICollection<Course> Courses { get; set; }
     }
 }

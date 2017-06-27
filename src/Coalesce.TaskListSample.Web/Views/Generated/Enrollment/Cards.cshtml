@@ -55,6 +55,14 @@
         <div class="card-body flex">
 
             <dl>
+                    <dt>Course I D</dt>
+                    <dd>
+                        @(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Enrollment>(p => p.CourseID, false))
+                    </dd>
+                    <dt>Student I D</dt>
+                    <dd>
+                        @(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Enrollment>(p => p.StudentID, false))
+                    </dd>
                     <dt>Grade</dt>
                     <dd>
                         @(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Enrollment>(p => p.Grade, false))

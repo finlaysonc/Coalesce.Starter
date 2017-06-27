@@ -64,6 +64,14 @@
             <table class="table @(ViewBag.Editable ? " editable" : "" )">
         <thead>
             <tr>
+                        <th class="sortable-header" data-bind="click: function(){orderByToggle('CourseID')}">
+                            Course I D
+                            <i class="pull-right fa" data-bind="css:{'fa-caret-up': orderBy() == 'CourseID', 'fa-caret-down': orderByDescending() == 'CourseID'}"></i>
+                        </th>
+                        <th class="sortable-header" data-bind="click: function(){orderByToggle('StudentID')}">
+                            Student I D
+                            <i class="pull-right fa" data-bind="css:{'fa-caret-up': orderBy() == 'StudentID', 'fa-caret-down': orderByDescending() == 'StudentID'}"></i>
+                        </th>
                         <th class="sortable-header" data-bind="click: function(){orderByToggle('Grade')}">
                             Grade
                             <i class="pull-right fa" data-bind="css:{'fa-caret-up': orderBy() == 'Grade', 'fa-caret-down': orderByDescending() == 'Grade'}"></i>
@@ -83,15 +91,19 @@
         </thead>
         <tbody>
             <!-- ko foreach: items -->
-            <tr data-bind="css: {'btn-warning': errorMessage()}, attr: {id: enrollmentId}">
+            <tr data-bind="css: {'btn-warning': errorMessage()}, attr: {id: enrollmentID}">
                     @if (@ViewBag.Editable)
                     {
+                        <td class="prop-courseID">@(Knockout.InputFor<Coalesce.TaskListSample.Data.Models.Enrollment>(p => p.CourseID))</td>
+                        <td class="prop-studentID">@(Knockout.InputFor<Coalesce.TaskListSample.Data.Models.Enrollment>(p => p.StudentID))</td>
                         <td class="prop-grade">@(Knockout.SelectFor<Coalesce.TaskListSample.Data.Models.Enrollment>(p => p.Grade))</td>
                         <td class="prop-course">@(Knockout.SelectForObject<Coalesce.TaskListSample.Data.Models.Enrollment>(p => p.Course))</td>
                         <td class="prop-student">@(Knockout.SelectForObject<Coalesce.TaskListSample.Data.Models.Enrollment>(p => p.Student))</td>
                     }
                     else
                     {
+                        <td class="prop-courseID">@(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Enrollment>(p => p.CourseID, true))</td>
+                        <td class="prop-studentID">@(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Enrollment>(p => p.StudentID, true))</td>
                         <td class="prop-grade">@(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Enrollment>(p => p.Grade, true))</td>
                         <td class="prop-course">@(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Enrollment>(p => p.Course, true))</td>
                         <td class="prop-student">@(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Enrollment>(p => p.Student, true))</td>

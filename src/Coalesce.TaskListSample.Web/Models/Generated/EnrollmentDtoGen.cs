@@ -21,9 +21,9 @@ namespace Coalesce.TaskListSample.Web.Models
     {
         public EnrollmentDtoGen() { }
 
-        public Int32? EnrollmentId { get; set; }
-        public Int32? CourseId { get; set; }
-        public Int32? StudentId { get; set; }
+        public Int32? EnrollmentID { get; set; }
+        public Int32? CourseID { get; set; }
+        public Int32? StudentID { get; set; }
         public System.Nullable<Coalesce.TaskListSample.Data.Models.Grade> Grade { get; set; }
         public CourseDtoGen Course { get; set; }
         public StudentDtoGen Student { get; set; }
@@ -60,9 +60,9 @@ namespace Coalesce.TaskListSample.Web.Models
             var newObject = new EnrollmentDtoGen();
             if (tree == null) objects.Add(obj, newObject);
             // Fill the properties of the object.
-            newObject.EnrollmentId = obj.EnrollmentId;
-            newObject.CourseId = obj.CourseId;
-            newObject.StudentId = obj.StudentId;
+            newObject.EnrollmentID = obj.EnrollmentID;
+            newObject.CourseID = obj.CourseID;
+            newObject.StudentID = obj.StudentID;
             newObject.Grade = obj.Grade;
             if (tree == null || tree[nameof(newObject.Course)] != null)
                 newObject.Course = CourseDtoGen.Create(obj.Course, user, includes, objects, tree?[nameof(newObject.Course)]);
@@ -98,8 +98,8 @@ namespace Coalesce.TaskListSample.Web.Models
             {
             }
 
-            entity.CourseId = (Int32)(CourseId ?? 0);
-            entity.StudentId = (Int32)(StudentId ?? 0);
+            entity.CourseID = (Int32)(CourseID ?? 0);
+            entity.StudentID = (Int32)(StudentID ?? 0);
             entity.Grade = Grade;
         }
 

@@ -9,7 +9,7 @@ module ViewModels {
 	export class Student extends Coalesce.BaseViewModel<Student>
     {
         protected modelName = "Student";
-        protected primaryKeyName = "studentId";
+        protected primaryKeyName = "studentID";
         protected modelDisplayName = "Student";
 
         protected apiController = "/Student";
@@ -26,13 +26,13 @@ module ViewModels {
             = new Coalesce.ViewModelConfiguration<Student>(Student.coalesceConfig);
     
         // Observables
-        public studentId: KnockoutObservable<number> = ko.observable(null);
+        public studentID: KnockoutObservable<number> = ko.observable(null);
         public enrollmentDate: KnockoutObservable<moment.Moment> = ko.observable(moment());
         public enrollments: KnockoutObservableArray<ViewModels.Enrollment> = ko.observableArray([]);
         public lastName: KnockoutObservable<string> = ko.observable(null);
-        public firstName: KnockoutObservable<string> = ko.observable(null);
+        public firstMidName: KnockoutObservable<string> = ko.observable(null);
         public fullName: KnockoutObservable<string> = ko.observable(null);
-        public calculatedField: KnockoutObservable<string> = ko.observable(null);
+        public fullNameCalculated: KnockoutObservable<string> = ko.observable(null);
 
        
         // Create computeds for display for objects
@@ -73,23 +73,23 @@ module ViewModels {
             // SetupValidation {
 			self.enrollmentDate = self.enrollmentDate.extend({ moment: { unix: true },  });
 			self.lastName = self.lastName.extend({ required: {params: true, message: "Last Name is required."} });
-			self.firstName = self.firstName.extend({ required: {params: true, message: "First Name is required."} });
+			self.firstMidName = self.firstMidName.extend({ required: {params: true, message: "First Name is required."} });
             
             self.errors = ko.validation.group([
-                self.studentId,
+                self.studentID,
                 self.enrollmentDate,
                 self.enrollments,
                 self.lastName,
-                self.firstName,
+                self.firstMidName,
                 self.fullName,
-                self.calculatedField,
+                self.fullNameCalculated,
             ]);
             self.warnings = ko.validation.group([
             ]);
 
             // Computed Observable for edit URL
             self.editUrl = ko.computed(function() {
-                return self.coalesceConfig.baseViewUrl() + self.viewController + "/CreateEdit?id=" + self.studentId();
+                return self.coalesceConfig.baseViewUrl() + self.viewController + "/CreateEdit?id=" + self.studentID();
             });
 
             // Create computeds for display for objects
@@ -102,12 +102,12 @@ module ViewModels {
 				if (!data || (!force && self.isLoading())) return;
 				self.isLoading(true);
 				// Set the ID 
-				self.myId = data.studentId;
-				self.studentId(data.studentId);
+				self.myId = data.studentID;
+				self.studentID(data.studentID);
 				// Load the lists of other objects
                 if (data.enrollments != null) {
 				    // Merge the incoming array
-				    Coalesce.KnockoutUtilities.RebuildArray(self.enrollments, data.enrollments, 'enrollmentId', Enrollment, self, allowCollectionDeletes);
+				    Coalesce.KnockoutUtilities.RebuildArray(self.enrollments, data.enrollments, 'enrollmentID', Enrollment, self, allowCollectionDeletes);
 				} 
 				// Objects are loaded first so that they are available when the IDs get loaded.
 				// This handles the issue with populating select lists with correct data because we now have the object.
@@ -118,9 +118,9 @@ module ViewModels {
 				    self.enrollmentDate(moment(data.enrollmentDate));
 				}
 				self.lastName(data.lastName);
-				self.firstName(data.firstName);
+				self.firstMidName(data.firstMidName);
 				self.fullName(data.fullName);
-				self.calculatedField(data.calculatedField);
+				self.fullNameCalculated(data.fullNameCalculated);
                 if (self.afterLoadFromDto){
                     self.afterLoadFromDto();
                 }
@@ -132,12 +132,13 @@ module ViewModels {
     	    // Save the object into a DTO
 			self.saveToDto = function() {
 				var dto: any = {};
-				dto.studentId = self.studentId();
+				dto.studentID = self.studentID();
 
                 if (!self.enrollmentDate()) dto.EnrollmentDate = null;
 				else dto.enrollmentDate = self.enrollmentDate().format('YYYY-MM-DDTHH:mm:ss');
     	        dto.lastName = self.lastName();
-    	        dto.firstName = self.firstName();
+    	        dto.firstMidName = self.firstMidName();
+    	        dto.fullName = self.fullName();
 
 				return dto;
 			}
@@ -152,7 +153,7 @@ module ViewModels {
                 newItem.parent = self;
                 newItem.parentCollection = self.enrollments;
                 newItem.isExpanded(true);
-                newItem.studentId(self.studentId());
+                newItem.studentID(self.studentID());
                 self.enrollments.push(newItem);
                 return newItem;
             }
@@ -163,13 +164,13 @@ module ViewModels {
                 if (!_enrollmentsList){
                     _enrollmentsList = new ListViewModels.EnrollmentList();
                     if (loadImmediate) loadEnrollmentsList();
-                    self.studentId.subscribe(loadEnrollmentsList)
+                    self.studentID.subscribe(loadEnrollmentsList)
                 }
                 return _enrollmentsList;
             }
             function loadEnrollmentsList() {
-                if (self.studentId()){
-                    _enrollmentsList.queryString = "StudentId=" + self.studentId();
+                if (self.studentID()){
+                    _enrollmentsList.queryString = "StudentID=" + self.studentID();
                     _enrollmentsList.load();
                 }
             }
@@ -178,13 +179,14 @@ module ViewModels {
             function setupSubscriptions() {
                 self.enrollmentDate.subscribe(self.autoSave);
                 self.lastName.subscribe(self.autoSave);
-                self.firstName.subscribe(self.autoSave);
+                self.firstMidName.subscribe(self.autoSave);
+                self.fullName.subscribe(self.autoSave);
             }  
 
             // Create variables for ListEditorApiUrls
             self.EnrollmentsListUrl = ko.computed({
                 read: function() {
-                         return self.coalesceConfig.baseViewUrl() + '/Enrollment/Table?studentId=' + self.studentId();
+                         return self.coalesceConfig.baseViewUrl() + '/Enrollment/Table?studentID=' + self.studentID();
                 },
                 deferEvaluation: true
             });

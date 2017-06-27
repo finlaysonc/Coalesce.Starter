@@ -11,11 +11,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Models\Department.cs" />
-    <Compile Remove="Models\OfficeAssignment.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\submodules\Coalesce\src\IntelliTect.Coalesce\IntelliTect.Coalesce.csproj" />
   </ItemGroup>
 

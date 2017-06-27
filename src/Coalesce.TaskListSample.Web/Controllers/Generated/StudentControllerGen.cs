@@ -5,7 +5,6 @@ using Microsoft.Extensions.PlatformAbstractions;
 using Coalesce.TaskListSample.Web;
 using Coalesce.TaskListSample.Data.Models;
 using Coalesce.TaskListSample.Data;
-using Microsoft.EntityFrameworkCore;
 
 namespace Coalesce.TaskListSample.Web.Controllers
 {
@@ -13,9 +12,7 @@ namespace Coalesce.TaskListSample.Web.Controllers
     public partial class StudentController
         : BaseViewController<Coalesce.TaskListSample.Data.Models.Student, AppDbContext>
     {
-        public StudentController() : base()
-        {
-        }
+        public StudentController() : base() { }
 
         [Authorize]
         public ActionResult Cards()

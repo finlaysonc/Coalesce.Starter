@@ -8,13 +8,17 @@
 
 
 /// <reference path="coalesce.dependencies.d.ts" />
-/// <reference path="Generated\Ko.ApplicationUser.ts" />
-/// <reference path="Generated\Ko.ApplicationUserList.ts" />
 /// <reference path="Generated\Ko.Course.ts" />
+/// <reference path="Generated\Ko.CourseAssignment.ts" />
+/// <reference path="Generated\Ko.CourseAssignmentList.ts" />
 /// <reference path="Generated\Ko.CourseList.ts" />
+/// <reference path="Generated\Ko.Department.ts" />
+/// <reference path="Generated\Ko.DepartmentList.ts" />
 /// <reference path="Generated\Ko.Enrollment.ts" />
 /// <reference path="Generated\Ko.EnrollmentList.ts" />
 /// <reference path="Generated\Ko.Instructor.ts" />
 /// <reference path="Generated\Ko.InstructorList.ts" />
+/// <reference path="Generated\Ko.OfficeAssignment.ts" />
+/// <reference path="Generated\Ko.OfficeAssignmentList.ts" />
 /// <reference path="Generated\Ko.Student.ts" />
 /// <reference path="Generated\Ko.StudentList.ts" />

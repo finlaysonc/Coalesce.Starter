@@ -17,18 +17,18 @@ module ListViewModels {
 
         protected apiController = "/Student";
 
-        public modelKeyName = "studentId";
+        public modelKeyName = "studentID";
         public dataSources = StudentDataSources;
         public itemClass = ViewModels.Student;
 
         public query: {
             where?: string;
-            studentId?:number;
+            studentID?:number;
             enrollmentDate?:moment.Moment;
             lastName?:String;
-            firstName?:String;
+            firstMidName?:String;
             fullName?:String;
-            calculatedField?:String;
+            fullNameCalculated?:String;
         } = null;
 
         // The custom code to run in order to pull the initial datasource to use for the collection that should be returned

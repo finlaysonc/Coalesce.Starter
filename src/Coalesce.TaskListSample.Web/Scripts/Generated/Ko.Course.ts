@@ -9,7 +9,7 @@ module ViewModels {
 	export class Course extends Coalesce.BaseViewModel<Course>
     {
         protected modelName = "Course";
-        protected primaryKeyName = "courseId";
+        protected primaryKeyName = "courseID";
         protected modelDisplayName = "Course";
 
         protected apiController = "/Course";
@@ -26,20 +26,31 @@ module ViewModels {
             = new Coalesce.ViewModelConfiguration<Course>(Course.coalesceConfig);
     
         // Observables
-        public courseId: KnockoutObservable<number> = ko.observable(null);
+        public courseID: KnockoutObservable<number> = ko.observable(null);
         public title: KnockoutObservable<string> = ko.observable(null);
         public credits: KnockoutObservable<number> = ko.observable(null);
-        public instructors: KnockoutObservableArray<ViewModels.Instructor> = ko.observableArray([]);
+        public departmentID: KnockoutObservable<number> = ko.observable(null);
+        public department: KnockoutObservable<ViewModels.Department> = ko.observable(null);
+        public enrollments: KnockoutObservableArray<ViewModels.Enrollment> = ko.observableArray([]);
+        public courseAssignments: KnockoutObservableArray<ViewModels.CourseAssignment> = ko.observableArray([]);
 
        
         // Create computeds for display for objects
+        public departmentText: () => string;
         
-        public addToInstructors: (autoSave?: boolean) => Instructor;
-        // List Object model for Instructors. Allows for loading subsets of data.
-        public instructorsList: (loadImmediate?: boolean) => ListViewModels.InstructorList;
+        public addToEnrollments: (autoSave?: boolean) => Enrollment;
+        // List Object model for Enrollments. Allows for loading subsets of data.
+        public enrollmentsList: (loadImmediate?: boolean) => ListViewModels.EnrollmentList;
+        public addToCourseAssignments: (autoSave?: boolean) => CourseAssignment;
+        // List Object model for CourseAssignments. Allows for loading subsets of data.
+        public courseAssignmentsList: (loadImmediate?: boolean) => ListViewModels.CourseAssignmentList;
 
-        public InstructorsListUrl: () => void; 
-                // Pops up a stock editor for this object.
+        public EnrollmentsListUrl: () => void; 
+        public CourseAssignmentsListUrl: () => void; 
+                public departmentValidValues: KnockoutObservableArray<any> = ko.observableArray([]);
+        public loadDepartmentValidValues: (callback?: any) => JQueryPromise<any>;
+        // Pops up a stock editor for this object.
+        public showDepartmentEditor: (callback?: any) => void;
 
 
 
@@ -71,20 +82,31 @@ module ViewModels {
 			self.credits = self.credits.extend({ min: 0, max: 5 });
             
             self.errors = ko.validation.group([
-                self.courseId,
+                self.courseID,
                 self.title,
                 self.credits,
-                self.instructors,
+                self.departmentID,
+                self.department,
+                self.enrollments,
+                self.courseAssignments,
             ]);
             self.warnings = ko.validation.group([
             ]);
 
             // Computed Observable for edit URL
             self.editUrl = ko.computed(function() {
-                return self.coalesceConfig.baseViewUrl() + self.viewController + "/CreateEdit?id=" + self.courseId();
+                return self.coalesceConfig.baseViewUrl() + self.viewController + "/CreateEdit?id=" + self.courseID();
             });
 
             // Create computeds for display for objects
+			self.departmentText = ko.computed(function()
+			{   // If the object exists, use the text value. Otherwise show 'None'
+				if (self.department() && self.department().name()) {
+					return self.department().name().toString();
+				} else {
+					return "None";
+				}
+			});
 
 
             // Load the ViewModel object from the DTO. 
@@ -94,19 +116,39 @@ module ViewModels {
 				if (!data || (!force && self.isLoading())) return;
 				self.isLoading(true);
 				// Set the ID 
-				self.myId = data.courseId;
-				self.courseId(data.courseId);
+				self.myId = data.courseID;
+				self.courseID(data.courseID);
 				// Load the lists of other objects
-                if (data.instructors != null) {
+                if (data.enrollments != null) {
 				    // Merge the incoming array
-				    Coalesce.KnockoutUtilities.RebuildArray(self.instructors, data.instructors, 'instructorId', Instructor, self, allowCollectionDeletes);
+				    Coalesce.KnockoutUtilities.RebuildArray(self.enrollments, data.enrollments, 'enrollmentID', Enrollment, self, allowCollectionDeletes);
+				} 
+                if (data.courseAssignments != null) {
+				    // Merge the incoming array
+				    Coalesce.KnockoutUtilities.RebuildArray(self.courseAssignments, data.courseAssignments, 'courseAssignmentID', CourseAssignment, self, allowCollectionDeletes);
 				} 
 				// Objects are loaded first so that they are available when the IDs get loaded.
 				// This handles the issue with populating select lists with correct data because we now have the object.
+				if (!data.department) { 
+					if (data.departmentID != self.departmentID()) {
+                        self.department(null);
+                    }
+                }else {
+                    if (!self.department()){
+					    self.department(new Department(data.department, self));
+				    }else{
+					    self.department().loadFromDto(data.department);
+				    }
+                    if (self.parent && self.parent.myId == self.department().myId && Coalesce.Utilities.getClassName(self.parent) == Coalesce.Utilities.getClassName(self.department()))
+                    {
+                        self.parent.loadFromDto(data.department, undefined, false);
+                    }
+                }
 
 				// The rest of the objects are loaded now.
 				self.title(data.title);
 				self.credits(data.credits);
+				self.departmentID(data.departmentID);
                 if (self.afterLoadFromDto){
                     self.afterLoadFromDto();
                 }
@@ -118,42 +160,73 @@ module ViewModels {
     	    // Save the object into a DTO
 			self.saveToDto = function() {
 				var dto: any = {};
-				dto.courseId = self.courseId();
+				dto.courseID = self.courseID();
 
     	        dto.title = self.title();
     	        dto.credits = self.credits();
+    	        dto.departmentID = self.departmentID();
 
 				return dto;
 			}
 
             // Methods to add to child collections
 
-            self.addToInstructors = function(autoSave = true) {
-                var newItem = new Instructor();
+            self.addToEnrollments = function(autoSave = true) {
+                var newItem = new Enrollment();
                 if (typeof(autoSave) == 'boolean'){
                     newItem.coalesceConfig.autoSaveEnabled(autoSave);
                 }
                 newItem.parent = self;
-                newItem.parentCollection = self.instructors;
+                newItem.parentCollection = self.enrollments;
                 newItem.isExpanded(true);
-                self.instructors.push(newItem);
+                newItem.courseID(self.courseID());
+                self.enrollments.push(newItem);
                 return newItem;
             }
             
-            // List Object model for Instructors. Allows for loading subsets of data.
-            var _instructorsList: ListViewModels.InstructorList = null;
-            self.instructorsList = function(loadImmediate = true) {
-                if (!_instructorsList){
-                    _instructorsList = new ListViewModels.InstructorList();
-                    if (loadImmediate) loadInstructorsList();
-                    self.courseId.subscribe(loadInstructorsList)
+            self.addToCourseAssignments = function(autoSave = true) {
+                var newItem = new CourseAssignment();
+                if (typeof(autoSave) == 'boolean'){
+                    newItem.coalesceConfig.autoSaveEnabled(autoSave);
                 }
-                return _instructorsList;
+                newItem.parent = self;
+                newItem.parentCollection = self.courseAssignments;
+                newItem.isExpanded(true);
+                newItem.courseID(self.courseID());
+                self.courseAssignments.push(newItem);
+                return newItem;
             }
-            function loadInstructorsList() {
-                if (self.courseId()){
-                    _instructorsList.queryString = "CourseId=" + self.courseId();
-                    _instructorsList.load();
+            
+            // List Object model for Enrollments. Allows for loading subsets of data.
+            var _enrollmentsList: ListViewModels.EnrollmentList = null;
+            self.enrollmentsList = function(loadImmediate = true) {
+                if (!_enrollmentsList){
+                    _enrollmentsList = new ListViewModels.EnrollmentList();
+                    if (loadImmediate) loadEnrollmentsList();
+                    self.courseID.subscribe(loadEnrollmentsList)
+                }
+                return _enrollmentsList;
+            }
+            function loadEnrollmentsList() {
+                if (self.courseID()){
+                    _enrollmentsList.queryString = "CourseID=" + self.courseID();
+                    _enrollmentsList.load();
+                }
+            }
+            // List Object model for CourseAssignments. Allows for loading subsets of data.
+            var _courseAssignmentsList: ListViewModels.CourseAssignmentList = null;
+            self.courseAssignmentsList = function(loadImmediate = true) {
+                if (!_courseAssignmentsList){
+                    _courseAssignmentsList = new ListViewModels.CourseAssignmentList();
+                    if (loadImmediate) loadCourseAssignmentsList();
+                    self.courseID.subscribe(loadCourseAssignmentsList)
+                }
+                return _courseAssignmentsList;
+            }
+            function loadCourseAssignmentsList() {
+                if (self.courseID()){
+                    _courseAssignmentsList.queryString = "CourseID=" + self.courseID();
+                    _courseAssignmentsList.load();
                 }
             }
 
@@ -161,21 +234,74 @@ module ViewModels {
             function setupSubscriptions() {
                 self.title.subscribe(self.autoSave);
                 self.credits.subscribe(self.autoSave);
+                self.departmentID.subscribe(self.autoSave);
+                self.department.subscribe(self.autoSave);
             }  
 
             // Create variables for ListEditorApiUrls
-            self.InstructorsListUrl = ko.computed({
+            self.EnrollmentsListUrl = ko.computed({
                 read: function() {
-                        return "Inverse property not set on Course for property Instructors";
+                         return self.coalesceConfig.baseViewUrl() + '/Enrollment/Table?courseID=' + self.courseID();
+                },
+                deferEvaluation: true
+            });
+            self.CourseAssignmentsListUrl = ko.computed({
+                read: function() {
+                         return self.coalesceConfig.baseViewUrl() + '/CourseAssignment/Table?courseID=' + self.courseID();
                 },
                 deferEvaluation: true
             });
             // Create loading function for Valid Values
 
+            self.loadDepartmentValidValues = function(callback) {
+                self.loadingValidValues++;
+                return $.ajax({
+                    method: "GET",
+                    url: self.coalesceConfig.baseApiUrl() + "/Department/CustomList?Fields=DepartmentID,Name",
+                    xhrFields: { withCredentials: true } })
+                .done(function(data) {
+                    self.isLoading(true);
+                    self.departmentValidValues(data.list);
+                    self.isLoading(false);
+                })
+                .fail(function(xhr) {
+                    var errorMsg = "Unknown Error";
+                    if (xhr.responseJSON && xhr.responseJSON.message) errorMsg = xhr.responseJSON.message;
+                    self.isLoading(false);
+
+                    if (self.coalesceConfig.showFailureAlerts())
+                        self.coalesceConfig.onFailure()(this, "Could not get Valid Values for Department: " + errorMsg);
+                })
+                .always(function(){
+                    self.loadingValidValues--;
+                    if (self.loadingValidValues === 0) {
+                        if ($.isFunction(callback)) {callback();}
+                    }
+                });
+            }
+            
+            self.showDepartmentEditor = function(callback: any) {
+                if (!self.department()) {
+                    self.department(new Department());
+                }
+                self.department().showEditor(callback)
+            };
 
             // Load all child objects that are not loaded.
             self.loadChildren = function(callback) {
                 var loadingCount = 0;
+                // See if self.department needs to be loaded.
+                if (self.department() == null && self.departmentID() != null){
+                    loadingCount++;
+                    var departmentObj = new Department();
+                    departmentObj.load(self.departmentID(), function() {
+                        loadingCount--;
+                        self.department(departmentObj);
+                        if (loadingCount == 0 && $.isFunction(callback)){
+                            callback();
+                        }
+                    });
+                }
                 if (loadingCount == 0 && $.isFunction(callback)){
                     callback();
                 }
@@ -184,7 +310,8 @@ module ViewModels {
 
             // Load all the valid values in parallel.
             self.loadValidValues = function(callback) {
-                if ($.isFunction(callback)) callback();
+                self.loadingValidValues = 0;
+                self.loadDepartmentValidValues(callback);
             };
 
             // Enumeration Lookups.

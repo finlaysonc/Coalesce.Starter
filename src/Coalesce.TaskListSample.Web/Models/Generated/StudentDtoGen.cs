@@ -21,13 +21,13 @@ namespace Coalesce.TaskListSample.Web.Models
     {
         public StudentDtoGen() { }
 
-        public Int32? StudentId { get; set; }
+        public Int32? StudentID { get; set; }
         public DateTime? EnrollmentDate { get; set; }
         public ICollection<EnrollmentDtoGen> Enrollments { get; set; }
         public System.String LastName { get; set; }
-        public System.String FirstName { get; set; }
+        public System.String FirstMidName { get; set; }
         public System.String FullName { get; set; }
-        public System.String CalculatedField { get; set; }
+        public System.String FullNameCalculated { get; set; }
 
         // Create a new version of this object or use it from the lookup.
         public static StudentDtoGen Create(Coalesce.TaskListSample.Data.Models.Student obj, ClaimsPrincipal user = null, string includes = null,
@@ -61,16 +61,16 @@ namespace Coalesce.TaskListSample.Web.Models
             var newObject = new StudentDtoGen();
             if (tree == null) objects.Add(obj, newObject);
             // Fill the properties of the object.
-            newObject.StudentId = obj.StudentId;
+            newObject.StudentID = obj.StudentID;
             newObject.EnrollmentDate = obj.EnrollmentDate;
             newObject.LastName = obj.LastName;
-            newObject.FirstName = obj.FirstName;
+            newObject.FirstMidName = obj.FirstMidName;
             newObject.FullName = obj.FullName;
-            newObject.CalculatedField = obj.CalculatedField;
+            newObject.FullNameCalculated = obj.FullNameCalculated;
             var propValEnrollments = obj.Enrollments;
             if (propValEnrollments != null && (tree == null || tree[nameof(newObject.Enrollments)] != null))
             {
-                newObject.Enrollments = propValEnrollments.OrderBy("EnrollmentId ASC").Select(f => EnrollmentDtoGen.Create(f, user, includes, objects, tree?[nameof(newObject.Enrollments)])).ToList();
+                newObject.Enrollments = propValEnrollments.OrderBy("EnrollmentID ASC").Select(f => EnrollmentDtoGen.Create(f, user, includes, objects, tree?[nameof(newObject.Enrollments)])).ToList();
             }
             else if (propValEnrollments == null && tree?[nameof(newObject.Enrollments)] != null)
             {
@@ -107,7 +107,8 @@ namespace Coalesce.TaskListSample.Web.Models
 
             entity.EnrollmentDate = (DateTime)(EnrollmentDate ?? DateTime.Today);
             entity.LastName = LastName;
-            entity.FirstName = FirstName;
+            entity.FirstMidName = FirstMidName;
+            entity.FullName = FullName;
         }
 
     }

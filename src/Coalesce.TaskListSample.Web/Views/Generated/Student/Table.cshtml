@@ -73,17 +73,17 @@
                             Last Name
                             <i class="pull-right fa" data-bind="css:{'fa-caret-up': orderBy() == 'LastName', 'fa-caret-down': orderByDescending() == 'LastName'}"></i>
                         </th>
-                        <th class="sortable-header" data-bind="click: function(){orderByToggle('FirstName')}">
+                        <th class="sortable-header" data-bind="click: function(){orderByToggle('FirstMidName')}">
                             First Name
-                            <i class="pull-right fa" data-bind="css:{'fa-caret-up': orderBy() == 'FirstName', 'fa-caret-down': orderByDescending() == 'FirstName'}"></i>
+                            <i class="pull-right fa" data-bind="css:{'fa-caret-up': orderBy() == 'FirstMidName', 'fa-caret-down': orderByDescending() == 'FirstMidName'}"></i>
                         </th>
                         <th class="sortable-header" data-bind="click: function(){orderByToggle('FullName')}">
                             Full Name
                             <i class="pull-right fa" data-bind="css:{'fa-caret-up': orderBy() == 'FullName', 'fa-caret-down': orderByDescending() == 'FullName'}"></i>
                         </th>
-                        <th class="sortable-header" data-bind="click: function(){orderByToggle('CalculatedField')}">
-                            Calculated Field
-                            <i class="pull-right fa" data-bind="css:{'fa-caret-up': orderBy() == 'CalculatedField', 'fa-caret-down': orderByDescending() == 'CalculatedField'}"></i>
+                        <th class="sortable-header" data-bind="click: function(){orderByToggle('FullNameCalculated')}">
+                            Full Name Calculated
+                            <i class="pull-right fa" data-bind="css:{'fa-caret-up': orderBy() == 'FullNameCalculated', 'fa-caret-down': orderByDescending() == 'FullNameCalculated'}"></i>
                         </th>
                 <th style="width: 1%">
                 </th>
@@ -92,24 +92,24 @@
         </thead>
         <tbody>
             <!-- ko foreach: items -->
-            <tr data-bind="css: {'btn-warning': errorMessage()}, attr: {id: studentId}">
+            <tr data-bind="css: {'btn-warning': errorMessage()}, attr: {id: studentID}">
                     @if (@ViewBag.Editable)
                     {
                         <td class="prop-enrollmentDate">@(Knockout.InputFor<Coalesce.TaskListSample.Data.Models.Student>(p => p.EnrollmentDate))</td>
                         <td class="prop-enrollments"><a data-bind='attr: {href: EnrollmentsListUrl}, text: enrollments().length + " - Edit"' class='btn btn-default btn-sm'></a></td>
                         <td class="prop-lastName">@(Knockout.InputFor<Coalesce.TaskListSample.Data.Models.Student>(p => p.LastName))</td>
-                        <td class="prop-firstName">@(Knockout.InputFor<Coalesce.TaskListSample.Data.Models.Student>(p => p.FirstName))</td>
-                        <td class="prop-fullName">@(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Student>(p => p.FullName, true))</td>
-                        <td class="prop-calculatedField">@(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Student>(p => p.CalculatedField, true))</td>
+                        <td class="prop-firstMidName">@(Knockout.InputFor<Coalesce.TaskListSample.Data.Models.Student>(p => p.FirstMidName))</td>
+                        <td class="prop-fullName">@(Knockout.InputFor<Coalesce.TaskListSample.Data.Models.Student>(p => p.FullName))</td>
+                        <td class="prop-fullNameCalculated">@(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Student>(p => p.FullNameCalculated, true))</td>
                     }
                     else
                     {
                         <td class="prop-enrollmentDate">@(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Student>(p => p.EnrollmentDate, true))</td>
                         <td class="prop-enrollments"><a data-bind='attr: {href: EnrollmentsListUrl}, text: enrollments().length + " - Edit"' class='btn btn-default btn-sm'></a></td>
                         <td class="prop-lastName">@(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Student>(p => p.LastName, true))</td>
-                        <td class="prop-firstName">@(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Student>(p => p.FirstName, true))</td>
+                        <td class="prop-firstMidName">@(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Student>(p => p.FirstMidName, true))</td>
                         <td class="prop-fullName">@(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Student>(p => p.FullName, true))</td>
-                        <td class="prop-calculatedField">@(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Student>(p => p.CalculatedField, true))</td>
+                        <td class="prop-fullNameCalculated">@(Knockout.DisplayFor<Coalesce.TaskListSample.Data.Models.Student>(p => p.FullNameCalculated, true))</td>
                     }
                 <td>
 

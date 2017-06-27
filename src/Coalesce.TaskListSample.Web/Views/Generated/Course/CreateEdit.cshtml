@@ -22,8 +22,20 @@
                         <label class="col-md-4 control-label">Credits</label>
 <div class="col-md-8 prop-credits">@(Knockout.InputFor<Coalesce.TaskListSample.Data.Models.Course>(p => p.Credits))</div>                    </div>
                     <div class="form-group">
-                        <label class="col-md-4 control-label">Instructors</label>
-<div class="col-md-8 prop-instructors"><a data-bind='attr: {href: InstructorsListUrl}, text: instructors().length + " - Edit"' class='btn btn-default btn-sm'></a></div>                    </div>
+                        <label class="col-md-4 control-label">Department I D</label>
+<div class="col-md-8 prop-departmentID">@(Knockout.InputFor<Coalesce.TaskListSample.Data.Models.Course>(p => p.DepartmentID))</div>                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Department</label>
+<div class="col-md-7 prop-department">@(Knockout.SelectForObject<Coalesce.TaskListSample.Data.Models.Course>(p => p.Department))</div>                            <div class="col-md-1" data-bind="with: department">
+                                <a data-bind="attr: {href: editUrl}" class="btn btn-default pull-right"><i class="fa fa-ellipsis-h "></i></a>
+                            </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Enrollments</label>
+<div class="col-md-8 prop-enrollments"><a data-bind='attr: {href: EnrollmentsListUrl}, text: enrollments().length + " - Edit"' class='btn btn-default btn-sm'></a></div>                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Course Assignments</label>
+<div class="col-md-8 prop-courseAssignments"><a data-bind='attr: {href: CourseAssignmentsListUrl}, text: courseAssignments().length + " - Edit"' class='btn btn-default btn-sm'></a></div>                    </div>
         </div>
     </div>
     <div class="panel-body">

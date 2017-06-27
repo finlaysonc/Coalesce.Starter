@@ -17,15 +17,16 @@ module ListViewModels {
 
         protected apiController = "/Course";
 
-        public modelKeyName = "courseId";
+        public modelKeyName = "courseID";
         public dataSources = CourseDataSources;
         public itemClass = ViewModels.Course;
 
         public query: {
             where?: string;
-            courseId?:number;
+            courseID?:number;
             title?:String;
             credits?:number;
+            departmentID?:number;
         } = null;
 
         // The custom code to run in order to pull the initial datasource to use for the collection that should be returned
@@ -35,6 +36,8 @@ module ListViewModels {
         public coalesceConfig = new Coalesce.ListViewModelConfiguration<CourseList, ViewModels.Course>(CourseList.coalesceConfig);
 
         // Valid values
+        public departmentValidValues: KnockoutObservableArray<any> = ko.observableArray([]);
+        public loadDepartmentValidValues: (callback: any) => void;
     
         protected createItem = (newItem?: any, parent?: any) => new ViewModels.Course(newItem, parent);
 

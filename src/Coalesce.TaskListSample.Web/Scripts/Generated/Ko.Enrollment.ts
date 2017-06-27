@@ -9,7 +9,7 @@ module ViewModels {
 	export class Enrollment extends Coalesce.BaseViewModel<Enrollment>
     {
         protected modelName = "Enrollment";
-        protected primaryKeyName = "enrollmentId";
+        protected primaryKeyName = "enrollmentID";
         protected modelDisplayName = "Enrollment";
 
         protected apiController = "/Enrollment";
@@ -26,9 +26,9 @@ module ViewModels {
             = new Coalesce.ViewModelConfiguration<Enrollment>(Enrollment.coalesceConfig);
     
         // Observables
-        public enrollmentId: KnockoutObservable<number> = ko.observable(null);
-        public courseId: KnockoutObservable<number> = ko.observable(null);
-        public studentId: KnockoutObservable<number> = ko.observable(null);
+        public enrollmentID: KnockoutObservable<number> = ko.observable(null);
+        public courseID: KnockoutObservable<number> = ko.observable(null);
+        public studentID: KnockoutObservable<number> = ko.observable(null);
         public grade: KnockoutObservable<any> = ko.observable(null);
         // Text value for enumeration Grade
         public gradeText: KnockoutComputed<string> = ko.computed<string>(() => "");
@@ -83,13 +83,11 @@ module ViewModels {
             });
 
             // SetupValidation {
-			self.courseId = self.courseId.extend({ required: {params: true, message: "Course is required."} });
-			self.studentId = self.studentId.extend({ required: {params: true, message: "Student is required."} });
             
             self.errors = ko.validation.group([
-                self.enrollmentId,
-                self.courseId,
-                self.studentId,
+                self.enrollmentID,
+                self.courseID,
+                self.studentID,
                 self.grade,
                 self.course,
                 self.student,
@@ -99,22 +97,22 @@ module ViewModels {
 
             // Computed Observable for edit URL
             self.editUrl = ko.computed(function() {
-                return self.coalesceConfig.baseViewUrl() + self.viewController + "/CreateEdit?id=" + self.enrollmentId();
+                return self.coalesceConfig.baseViewUrl() + self.viewController + "/CreateEdit?id=" + self.enrollmentID();
             });
 
             // Create computeds for display for objects
 			self.courseText = ko.computed(function()
 			{   // If the object exists, use the text value. Otherwise show 'None'
-				if (self.course() && self.course().courseId()) {
-					return self.course().courseId().toString();
+				if (self.course() && self.course().courseID()) {
+					return self.course().courseID().toString();
 				} else {
 					return "None";
 				}
 			});
 			self.studentText = ko.computed(function()
 			{   // If the object exists, use the text value. Otherwise show 'None'
-				if (self.student() && self.student().studentId()) {
-					return self.student().studentId().toString();
+				if (self.student() && self.student().studentID()) {
+					return self.student().studentID().toString();
 				} else {
 					return "None";
 				}
@@ -128,13 +126,13 @@ module ViewModels {
 				if (!data || (!force && self.isLoading())) return;
 				self.isLoading(true);
 				// Set the ID 
-				self.myId = data.enrollmentId;
-				self.enrollmentId(data.enrollmentId);
+				self.myId = data.enrollmentID;
+				self.enrollmentID(data.enrollmentID);
 				// Load the lists of other objects
 				// Objects are loaded first so that they are available when the IDs get loaded.
 				// This handles the issue with populating select lists with correct data because we now have the object.
 				if (!data.course) { 
-					if (data.courseId != self.courseId()) {
+					if (data.courseID != self.courseID()) {
                         self.course(null);
                     }
                 }else {
@@ -149,7 +147,7 @@ module ViewModels {
                     }
                 }
 				if (!data.student) { 
-					if (data.studentId != self.studentId()) {
+					if (data.studentID != self.studentID()) {
                         self.student(null);
                     }
                 }else {
@@ -165,8 +163,8 @@ module ViewModels {
                 }
 
 				// The rest of the objects are loaded now.
-				self.courseId(data.courseId);
-				self.studentId(data.studentId);
+				self.courseID(data.courseID);
+				self.studentID(data.studentID);
 				self.grade(data.grade);
                 if (self.afterLoadFromDto){
                     self.afterLoadFromDto();
@@ -179,16 +177,10 @@ module ViewModels {
     	    // Save the object into a DTO
 			self.saveToDto = function() {
 				var dto: any = {};
-				dto.enrollmentId = self.enrollmentId();
+				dto.enrollmentID = self.enrollmentID();
 
-				dto.courseId = self.courseId();
-				if (!dto.courseId && self.course()) {
-				    dto.courseId = self.course().courseId();
-				}
-				dto.studentId = self.studentId();
-				if (!dto.studentId && self.student()) {
-				    dto.studentId = self.student().studentId();
-				}
+    	        dto.courseID = self.courseID();
+    	        dto.studentID = self.studentID();
     	        dto.grade = self.grade();
 
 				return dto;
@@ -199,8 +191,8 @@ module ViewModels {
 
             // Save on changes
             function setupSubscriptions() {
-                self.courseId.subscribe(self.autoSave);
-                self.studentId.subscribe(self.autoSave);
+                self.courseID.subscribe(self.autoSave);
+                self.studentID.subscribe(self.autoSave);
                 self.grade.subscribe(self.autoSave);
                 self.course.subscribe(self.autoSave);
                 self.student.subscribe(self.autoSave);
@@ -213,7 +205,7 @@ module ViewModels {
                 self.loadingValidValues++;
                 return $.ajax({
                     method: "GET",
-                    url: self.coalesceConfig.baseApiUrl() + "/Course/CustomList?Fields=CourseId,CourseId",
+                    url: self.coalesceConfig.baseApiUrl() + "/Course/CustomList?Fields=CourseID,CourseID",
                     xhrFields: { withCredentials: true } })
                 .done(function(data) {
                     self.isLoading(true);
@@ -240,7 +232,7 @@ module ViewModels {
                 self.loadingValidValues++;
                 return $.ajax({
                     method: "GET",
-                    url: self.coalesceConfig.baseApiUrl() + "/Student/CustomList?Fields=StudentId,StudentId",
+                    url: self.coalesceConfig.baseApiUrl() + "/Student/CustomList?Fields=StudentID,StudentID",
                     xhrFields: { withCredentials: true } })
                 .done(function(data) {
                     self.isLoading(true);
@@ -280,10 +272,10 @@ module ViewModels {
             self.loadChildren = function(callback) {
                 var loadingCount = 0;
                 // See if self.course needs to be loaded.
-                if (self.course() == null && self.courseId() != null){
+                if (self.course() == null && self.courseID() != null){
                     loadingCount++;
                     var courseObj = new Course();
-                    courseObj.load(self.courseId(), function() {
+                    courseObj.load(self.courseID(), function() {
                         loadingCount--;
                         self.course(courseObj);
                         if (loadingCount == 0 && $.isFunction(callback)){
@@ -292,10 +284,10 @@ module ViewModels {
                     });
                 }
                 // See if self.student needs to be loaded.
-                if (self.student() == null && self.studentId() != null){
+                if (self.student() == null && self.studentID() != null){
                     loadingCount++;
                     var studentObj = new Student();
-                    studentObj.load(self.studentId(), function() {
+                    studentObj.load(self.studentID(), function() {
                         loadingCount--;
                         self.student(studentObj);
                         if (loadingCount == 0 && $.isFunction(callback)){

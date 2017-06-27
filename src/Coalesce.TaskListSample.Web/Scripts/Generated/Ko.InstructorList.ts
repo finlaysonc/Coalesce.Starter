@@ -17,18 +17,18 @@ module ListViewModels {
 
         protected apiController = "/Instructor";
 
-        public modelKeyName = "instructorId";
+        public modelKeyName = "instructorID";
         public dataSources = InstructorDataSources;
         public itemClass = ViewModels.Instructor;
 
         public query: {
             where?: string;
-            instructorId?:number;
+            instructorID?:number;
             hireDate?:moment.Moment;
             lastName?:String;
-            firstName?:String;
+            firstMidName?:String;
             fullName?:String;
-            calculatedField?:String;
+            fullNameCalculated?:String;
         } = null;
 
         // The custom code to run in order to pull the initial datasource to use for the collection that should be returned
@@ -38,6 +38,8 @@ module ListViewModels {
         public coalesceConfig = new Coalesce.ListViewModelConfiguration<InstructorList, ViewModels.Instructor>(InstructorList.coalesceConfig);
 
         // Valid values
+        public officeAssignmentValidValues: KnockoutObservableArray<any> = ko.observableArray([]);
+        public loadOfficeAssignmentValidValues: (callback: any) => void;
     
         protected createItem = (newItem?: any, parent?: any) => new ViewModels.Instructor(newItem, parent);
 
